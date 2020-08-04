@@ -1,0 +1,51 @@
+{
+	"name": "unoconv-webservice",
+	"version": "0.1.0",
+	"description": "REST api to convert files to different formats using unoconv",
+	"license": "MIT",
+	"author": "Sven Patrick Meier <sven.meier@team-parallax.com>",
+	"main": "src/app.ts",
+	"scripts": {
+		"test": "jest --config ./jest.config.js",
+		"preinstall": "npx use-yarn",
+		"lint": "yarn eslint src --ext .ts --fix",
+		"tsoa:create": "tsoa spec && tsoa routes",
+		"tsoa:create:local": "yarn tsoa:create && gsed -i 's/https/http/g' swagger.json",
+		"start": "ts-node src/app.ts",
+		"start:dev": "yarn tsoa:create:local && yarn start"
+	},
+	"dependencies": {
+		"body-parser": "^1.19.0",
+		"cors": "^2.8.5",
+		"express": "^4.17.1",
+		"tsoa": "^3.2.1"
+	},
+	"devDependencies": {
+		"@types/body-parser": "^1.19.0",
+		"@types/cors": "^2.8.7",
+		"@types/express": "^4.17.7",
+		"@types/jest": "^26.0.8",
+		"@types/node": "^14.0.27",
+		"@types/swagger-ui-express": "^4.1.2",
+		"@typescript-eslint/eslint-plugin": "^2.14.0",
+		"@typescript-eslint/parser": "^2.14.0",
+		"concurrently": "^5.2.0",
+		"eslint": "^7.6.0",
+		"eslint-plugin-filenames": "^1.3.2",
+		"eslint-plugin-import": "^2.22.0",
+		"eslint-plugin-import-alias": "^1.2.0",
+		"eslint-plugin-jsdoc": "^22.1.0",
+		"eslint-plugin-sort-imports-es6-autofix": "^0.5.0",
+		"eslint-plugin-sort-keys-fix": "^1.1.1",
+		"eslint-plugin-typescript-sort-keys": "^1.3.0",
+		"eslint-plugin-unused-imports": "^0.1.2",
+		"jest": "^26.2.2",
+		"lint-staged": "^10.0.9",
+		"parallax-common-config": "^0.10.7",
+		"source-map-support": "^0.5.16",
+		"swagger-ui-express": "^4.1.4",
+		"ts-jest": "^26.1.4",
+		"ts-node": "^8.10.2",
+		"typescript": "^3.9.7"
+	}
+}
