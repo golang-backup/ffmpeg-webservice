@@ -1,10 +1,11 @@
-import { RegisterRoutes } from "./routes/routes"
+import { EHttpResponseCodes } from "../../constants"
+import { RegisterRoutes } from "../../routes/routes"
 import bodyParser from "body-parser"
 import cors from "cors"
 import express, {
 	Application, Express, NextFunction, Request, Response
 } from "express"
-import swaggerDocument from "../swagger.json"
+import swaggerDocument from "../../../swagger.json"
 import swaggerUi from "swagger-ui-express"
 export class Server {
 	private readonly _port: number
@@ -34,7 +35,7 @@ export class Server {
 			res: Response,
 			next: NextFunction
 		) => {
-			const status = err.status || 500
+			const status = err.status || EHttpResponseCodes.internalServerError
 			console.error(err)
 			const body: any = {
 				fields: err.fields || undefined,

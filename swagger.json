@@ -29,13 +29,131 @@
 					"targetFormat"
 				],
 				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"file": {
+						"type": "Buffer",
+						"data": [
+							67,
+							111,
+							110,
+							118,
+							101,
+							114,
+							116,
+							101,
+							100,
+							32,
+							118,
+							105,
+							97,
+							32,
+							116,
+							101,
+							97,
+							109,
+							112,
+							97,
+							114,
+							97,
+							108,
+							108,
+							97,
+							120,
+							47,
+							117,
+							110,
+							111,
+							99,
+							111,
+							110,
+							118,
+							45,
+							119,
+							101,
+							98,
+							115,
+							101,
+							114,
+							118,
+							105,
+							99,
+							101,
+							10
+						]
+					},
+					"filename": "assignment1",
+					"originalFormat": "docx",
+					"targetFormat": "pdf"
+				}
+			},
+			"EConversionStatus": {
+				"enum": [
+					"converted",
+					"in queue",
+					"processing"
+				],
+				"type": "string"
+			},
+			"IConversionStatus": {
+				"properties": {
+					"conversionId": {
+						"type": "string"
+					},
+					"status": {
+						"$ref": "#/components/schemas/EConversionStatus"
+					}
+				},
+				"required": [
+					"conversionId",
+					"status"
+				],
+				"type": "object",
 				"additionalProperties": false
+			},
+			"IConversionQueueStatus": {
+				"properties": {
+					"conversions": {
+						"items": {
+							"$ref": "#/components/schemas/IConversionStatus"
+						},
+						"type": "array"
+					},
+					"remainingConversions": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"conversions",
+					"remainingConversions"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"conversions": [
+						{
+							"conversionId": "55309c37-aed3-4ee9-a143-f1e305333189",
+							"status": "converted"
+						},
+						{
+							"conversionId": "52a22c37-aed3-4ee9-a442-f1e30537v189",
+							"status": "processing"
+						},
+						{
+							"conversionId": "940403bf-98ad-454c-a3b4-2e6ebf915ac6",
+							"status": "in queue",
+							"queuePosition": 1
+						}
+					],
+					"remainingConversions": 1
+				}
 			}
 		},
 		"securitySchemes": {}
 	},
 	"info": {
-		"title": "unoconv-webservice",
+		"title": "ffmpeg-webservice",
 		"version": "0.1.0",
 		"description": "REST api to convert files to different formats using unoconv",
 		"license": {
@@ -61,12 +179,14 @@
 						}
 					}
 				},
+				"description": "Adds the file from the request body to the internal conversion queue.\nThe files in queue will be processed after the FIFO principle.",
 				"tags": [
 					"Conversion"
 				],
 				"security": [],
 				"parameters": [],
 				"requestBody": {
+					"description": "contains the file to convert",
 					"required": true,
 					"content": {
 						"application/json": {
@@ -76,6 +196,27 @@
 						}
 					}
 				}
+			},
+			"get": {
+				"operationId": "GetConversions",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IConversionQueueStatus"
+								}
+							}
+						}
+					}
+				},
+				"description": "Retrieves the status of the conversion queue and returns all conversions with\ntheir corresponding status and the amount of outstanding conversions.",
+				"tags": [
+					"Conversion"
+				],
+				"security": [],
+				"parameters": []
 			}
 		},
 		"/conversion/{fileId}": {
@@ -91,12 +232,14 @@
 						}
 					}
 				},
+				"description": "Returns the current status for a conversion given a conversionId",
 				"tags": [
 					"Conversion"
 				],
 				"security": [],
 				"parameters": [
 					{
+						"description": "Unique identifier for the conversion of a file.",
 						"in": "path",
 						"name": "fileId",
 						"required": true,
@@ -105,6 +248,22 @@
 						}
 					}
 				]
+			}
+		},
+		"/formats": {
+			"get": {
+				"operationId": "GetSupportedFormats",
+				"responses": {
+					"204": {
+						"description": "No content"
+					}
+				},
+				"description": "Returns a list of all possible formats to convert from and to.",
+				"tags": [
+					"Conversion-Formats"
+				],
+				"security": [],
+				"parameters": []
 			}
 		}
 	},

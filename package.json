@@ -1,5 +1,5 @@
 {
-	"name": "unoconv-webservice",
+	"name": "ffmpeg-webservice",
 	"version": "0.1.0",
 	"description": "REST api to convert files to different formats using unoconv",
 	"license": "MIT",
@@ -10,7 +10,7 @@
 		"preinstall": "npx use-yarn",
 		"lint": "yarn eslint src --ext .ts --fix",
 		"tsoa:create": "tsoa spec && tsoa routes",
-		"tsoa:create:local": "yarn tsoa:create && gsed -i 's/https/http/g' swagger.json",
+		"tsoa:create:local": "yarn tsoa:create && sed -i 's/https/http/g' swagger.json",
 		"start": "ts-node src/app.ts",
 		"start:dev": "yarn tsoa:create:local && yarn start"
 	},

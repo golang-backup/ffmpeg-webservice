@@ -1,4 +1,4 @@
-import { Server } from "../server"
+import { Server } from "../service/api"
 const defaultPort: number = 3000
 const port: number = 1337
 const port2: number = 2222
