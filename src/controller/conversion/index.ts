@@ -3,11 +3,18 @@ import {
 } from "tsoa"
 import { ConversionService } from "../../service/conversion"
 import { EHttpResponseCodes } from "../../constants"
-import { IConversionQueueStatus } from "../../service/conversion/interface"
+import {
+	IConversionProcessingResponse,
+	IConversionQueueStatus,
+	IConversionStatus
+} from "../../service/conversion/interface"
 import { IConversionRequestBody } from "../../model"
+import { Inject } from "typescript-ioc"
 @Route("/conversion")
 @Tags("Conversion")
 export class ConversionController extends Controller {
+	@Inject
+	private readonly conversionService!: ConversionService
 	/**
 	 * Adds the file from the request body to the internal conversion queue.
 	 * The files in queue will be processed after the FIFO principle.
@@ -16,9 +23,9 @@ export class ConversionController extends Controller {
 	@Post("/")
 	public async convertFile(
 		@Body() conversionRequestBody: IConversionRequestBody
-	): Promise<any> {
+	): Promise<IConversionProcessingResponse> {
 		this.setStatus(EHttpResponseCodes.internalServerError)
-		return await ConversionService.convertFile(conversionRequestBody)
+		return await this.conversionService.processConversionRequest(conversionRequestBody)
 	}
 	/**
 	 * Retrieves the status of the conversion queue and returns all conversions with
@@ -26,14 +33,23 @@ export class ConversionController extends Controller {
 	 */
 	@Get("/")
 	public getConversions(): IConversionQueueStatus {
-		return new ConversionService().getConversionQueueStatus()
+		return this.conversionService.getConversionQueueStatus()
 	}
 	/**
 	 * Returns the current status for a conversion given a conversionId
 	 * @param fileId Unique identifier for the conversion of a file.
 	 */
 	@Get("/{fileId}")
-	public async getConvertedFile(@Path() fileId: string): Promise<any> {
-		return await ConversionService.getConvertedFile(fileId)
+	public getConvertedFile(@Path() fileId: string): IConversionStatus {
+		try {
+			return this.conversionService.getConvertedFile(fileId)
+		}
+		catch (err) {
+			this.setStatus(EHttpResponseCodes.notFound)
+			return {
+				conversionId: fileId,
+				status: err.message
+			}
+		}
 	}
 }

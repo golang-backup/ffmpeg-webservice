@@ -5,14 +5,17 @@ import {
 	Tags
 } from "tsoa"
 import { ConversionService } from "../service/conversion"
+import { Inject } from "typescript-ioc"
 @Route("/")
 @Tags("Conversion-Formats")
 export class IndexController extends Controller {
+	@Inject
+	private readonly conversionService!: ConversionService
 	/**
 	 * Returns a list of all possible formats to convert from and to.
 	 */
 	@Get("/formats")
 	public async getSupportedFormats(): Promise<void> {
-		return await new ConversionService().getSupportedFormats()
+		// Return await conversionService.getSupportedFormats()
 	}
 }
