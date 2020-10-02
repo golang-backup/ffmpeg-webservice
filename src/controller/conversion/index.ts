@@ -24,7 +24,7 @@ export class ConversionController extends Controller {
 	 * Retrieves the status of the conversion queue and returns all conversions with
 	 * their corresponding status and the amount of outstanding conversions.
 	 */
-	@Get("")
+	@Get("/")
 	public getConversions(): IConversionQueueStatus {
 		return new ConversionService().getConversionQueueStatus()
 	}
@@ -32,7 +32,7 @@ export class ConversionController extends Controller {
 	 * Returns the current status for a conversion given a conversionId
 	 * @param fileId Unique identifier for the conversion of a file.
 	 */
-	@Get("{fileId}")
+	@Get("/{fileId}")
 	public async getConvertedFile(@Path() fileId: string): Promise<any> {
 		return await ConversionService.getConvertedFile(fileId)
 	}
