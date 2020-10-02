@@ -10,7 +10,7 @@
 		"preinstall": "npx use-yarn",
 		"lint": "yarn eslint src --ext .ts --fix",
 		"tsoa:create": "tsoa spec && tsoa routes",
-		"tsoa:create:local": "yarn tsoa:create && gsed -i 's/https/http/g' swagger.json",
+		"tsoa:create:local": "yarn tsoa:create && sed -i 's/https/http/g' swagger.json",
 		"start": "ts-node src/app.ts",
 		"start:dev": "yarn tsoa:create:local && yarn start"
 	},
@@ -18,7 +18,8 @@
 		"body-parser": "^1.19.0",
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
-		"tsoa": "^3.2.1"
+		"tsoa": "^3.2.1",
+		"uuid": "^8.3.0"
 	},
 	"devDependencies": {
 		"@types/body-parser": "^1.19.0",
@@ -27,6 +28,7 @@
 		"@types/jest": "^26.0.8",
 		"@types/node": "^14.0.27",
 		"@types/swagger-ui-express": "^4.1.2",
+		"@types/uuid": "^8.3.0",
 		"@typescript-eslint/eslint-plugin": "^2.14.0",
 		"@typescript-eslint/parser": "^2.14.0",
 		"concurrently": "^5.2.0",
@@ -46,6 +48,7 @@
 		"swagger-ui-express": "^4.1.4",
 		"ts-jest": "^26.1.4",
 		"ts-node": "^8.10.2",
-		"typescript": "^3.9.7"
+		"typescript": "^3.9.7",
+		"typescript-ioc": "^3.2.2"
 	}
 }

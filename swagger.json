@@ -6,6 +6,21 @@
 		"requestBodies": {},
 		"responses": {},
 		"schemas": {
+			"IConversionProcessingResponse": {
+				"properties": {
+					"conversionId": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"conversionId"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"conversionId": "55309c37-aed3-4ee9-a143-f1e305333189"
+				}
+			},
 			"IConversionRequestBody": {
 				"properties": {
 					"file": {
@@ -155,13 +170,13 @@
 	"info": {
 		"title": "ffmpeg-webservice",
 		"version": "0.1.0",
-		"description": "REST api to convert files to different formats using unoconv",
+		"description": "REST api to convert files to different formats using ffmpeg",
 		"license": {
 			"name": "MIT"
 		},
 		"contact": {
 			"name": "Sven Patrick Meier ",
-			"email": "sven.meier@team-parallax.com"
+			"email": "sven.patrick.meier@team-parallax.com"
 		}
 	},
 	"openapi": "3.0.0",
@@ -174,7 +189,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/IConversionProcessingResponse"
+								}
 							}
 						}
 					}
@@ -227,7 +244,9 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
-								"schema": {}
+								"schema": {
+									"$ref": "#/components/schemas/IConversionStatus"
+								}
 							}
 						}
 					}
