@@ -16,11 +16,8 @@ import { writeToFile } from "../file-io"
 export class ConversionService {
 	@Inject
 	private readonly conversionQueueService!: ConversionQueueService
-	private readonly logger: Logger
-	constructor() {
-		this.conversionQueueService = new ConversionQueueService()
-		this.logger = new Logger()
-	}
+	@Inject
+	private readonly logger!: Logger
 	public addToConversionQueue(requestObject: IConversionRequest): IConversionProcessingResponse {
 		const {
 			conversionId
@@ -44,6 +41,7 @@ export class ConversionService {
 			this.queueService.currentlyConvertingFile = fileToProcess
 			this.queueService.changeConvLogEntry(conversionId, EConversionStatus.processing)
 			try {
+				// Todo: Implement wrapper.
 				// Const resp = await UnoconvService.convertToTarget({
 				// 	ConversionId,
 				// 	FilePath: path,
@@ -61,6 +59,7 @@ export class ConversionService {
 				this.logger.error(err)
 			}
 			finally {
+				// Todo: refactor/replace with function
 				this.isCurrentlyConverting = false
 				// eslint-disable-next-line no-void
 				void this.update()

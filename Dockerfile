@@ -12,4 +12,5 @@ RUN apk --no-cache \
     jq \
     npm \
     && ffmpeg -buildconf \
-    && npm install -g yarn
+    && npm install -g yarn \
+	&& yarn install
