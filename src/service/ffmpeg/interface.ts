@@ -12,6 +12,10 @@ export interface IConversionParams {
 	outputFilename?: string,
 	targetFormat: string
 }
+export interface IOptions {
+	encoder: unknown[],
+	filter: unknown[]
+}
 // #endregion
 // #region Capabilities
 /* Generic Capabilities Object for FFmpeg */
