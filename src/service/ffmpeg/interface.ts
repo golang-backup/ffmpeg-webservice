@@ -1,4 +1,4 @@
-//#region Review
+// #region Review
 export interface IConvertedFile {
 	// TODO: review if this is sufficient for usecase.
 	outputFilename: string,
@@ -12,40 +12,40 @@ export interface IConversionParams {
 	outputFilename?: string,
 	targetFormat: string
 }
-//#endregion
-//#region Capabilities
+// #endregion
+// #region Capabilities
 /* Generic Capabilities Object for FFmpeg */
 export interface IFFmpegCapabilities {
-	filters: IFilter[]
+	codecs: ICodec[],
+	encoders: IEncoder[],
+	filters: IFilter[],
 	formats: IFormat[]
-	codecs: ICodec[]
-	encoders: IEncoder[]
 }
 /**
-	 * Returns all available codecs that can be used with FFmpeg.
-	 *
-	 * @tsoaModel
-	 * @example
-	 * {
-	 *  "mp3": {
-	 *    "type": "audio",
-	 *    "description": "(decoders: mp3float mp3 ) (encoders: libmp3lame )",
-	 *    "canDecode": true,
-	 *    "canEncode": true,
-	 *    "intraFrameOnly": true,
-	 *    "isLossy": true,
-	 *    "isLossless": false
-	 *  },
-	 *  "libmp3lame": {
-	 *    "type": "audio",
-	 *    "description": "(decoders: mp3float mp3 ) (encoders: libmp3lame )",
-	 *    "intraFrameOnly": true,
-	 *    "isLossy": true,
-	 *    "isLossless": false,
-	 *    "canEncode": true
-	 *  }
-	 * }
-	 */
+ * Returns all available codecs that can be used with FFmpeg.
+ *
+ * @tsoaModel
+ * @example
+ * {
+ *  "mp3": {
+ *    "type": "audio",
+ *    "description": "(decoders: mp3float mp3 ) (encoders: libmp3lame )",
+ *    "canDecode": true,
+ *    "canEncode": true,
+ *    "intraFrameOnly": true,
+ *    "isLossy": true,
+ *    "isLossless": false
+ *  },
+ *  "libmp3lame": {
+ *    "type": "audio",
+ *    "description": "(decoders: mp3float mp3 ) (encoders: libmp3lame )",
+ *    "intraFrameOnly": true,
+ *    "isLossy": true,
+ *    "isLossless": false,
+ *    "canEncode": true
+ *  }
+ * }
+ */
 export interface IFFmpegCapabilitiesObject<T> {
 	[key: string]: T
 }
@@ -54,10 +54,12 @@ export interface IFormat extends IFormatData {
 	name: string
 }
 export interface IFormatData {
-	canDemux: boolean
-	canMux: boolean
+	canDemux: boolean,
+	canMux: boolean,
 	description: string
 }
+export type TCapabilities = ICodec | IFilter | IFormat | IEncoder
+export type TCapabilitiesData = ICodecData | IFilterData | IFormatData | IEncoderData
 /**
  * @tsoaModel
  * @example
@@ -68,47 +70,45 @@ export interface IFormatData {
  *   "canEncode": true,
  *   "intraFrameOnly": true,
  *   "isLossy": true,
- *   "isLossless": false
+ *   "isLossless": false,
+ *   "name": "mp3"
  * }
  */
-export type TCapabilities = ICodec | IFilter | IFormat | IEncoder
-export type TCapabilitiesData = ICodecData | IFilterData | IFormatData | IEncoderData
-
 export interface ICodec extends ICodecData {
 	name: string
 }
 export interface ICodecData {
-	type: string
-	description: string
-	canDecode: boolean
-	canEncode: boolean
-	drawHorizBand?: boolean
-	directRendering?: boolean
+	canDecode: boolean,
+	canEncode: boolean,
+	description: string,
+	directRendering?: boolean,
+	drawHorizBand?: boolean,
+	intraFrameOnly?: boolean,
+	isLossless?: boolean,
+	isLossy?: boolean,
+	type: string,
 	weirdFrameTruncation?: boolean
-	intraFrameOnly?: boolean
-	isLossy?: boolean
-	isLossless?: boolean
 }
 export interface IEncoder extends IEncoderData {
 	name: string
 }
 export interface IEncoderData {
-	description: string
-	directRendering: boolean
-	drawHorizBand: boolean
-	experimental: boolean
-	frameMT: boolean
-	sliceMT: boolean
+	description: string,
+	directRendering: boolean,
+	drawHorizBand: boolean,
+	experimental: boolean,
+	frameMT: boolean,
+	sliceMT: boolean,
 	type: string
 }
 export interface IFilter extends IFilterData {
 	name: string
 }
 export interface IFilterData {
-	description: string
-	input: string
-	multipleInputs: boolean
-	multipleOutputs: boolean
+	description: string,
+	input: string,
+	multipleInputs: boolean,
+	multipleOutputs: boolean,
 	output: string
 }
-//#endregion
+// #endregion

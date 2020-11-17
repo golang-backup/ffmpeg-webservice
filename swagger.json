@@ -264,7 +264,17 @@
 					"name"
 				],
 				"type": "object",
-				"additionalProperties": false
+				"additionalProperties": false,
+				"example": {
+					"type": "audio",
+					"description": "(decoders: mp3float mp3 ) (encoders: libmp3lame )",
+					"canDecode": true,
+					"canEncode": true,
+					"intraFrameOnly": true,
+					"isLossy": true,
+					"isLossless": false,
+					"name": "mp3"
+				}
 			},
 			"IEncoder": {
 				"properties": {
