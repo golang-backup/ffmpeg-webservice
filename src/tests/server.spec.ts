@@ -1,20 +1,20 @@
-import { Server } from "../service/api"
+import { Api } from "../service/api"
 const defaultPort: number = 3000
 const port: number = 1337
 const port2: number = 2222
 let port3: number
 describe("Port is assigned to correct value: ", () => {
-	let server: Server
+	let server: Api
 	it("should have port 1337", () => {
-		server = new Server(port)
+		server = new Api(port)
 		expect(server.port).toBe(port)
 	})
 	it("should have port 2222", () => {
-		server = new Server(port2)
+		server = new Api(port2)
 		expect(server.port).toBe(port2)
 	})
 	it("should have port the default port: 1111", () => {
-		server = new Server(port3)
+		server = new Api(port3)
 		expect(server.port).toBe(defaultPort)
 	})
 })

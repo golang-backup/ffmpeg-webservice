@@ -4,7 +4,11 @@ This project provides a webservice with a REST-API for file-conversions using `f
 
 ## Prerequisites
 
-// Tbd
+### Correct path for ffmpeg
+
+In order to work properly a correct set PATH variable for ffmpeg needs to exist. When running this webservice within this docker (based on `alfg/ffmpeg:latest`) the ffmpeg installation path is `/opt/ffmpeg/bin/ffmpeg`. The used library `fluent-ffmpeg` will use the value of FFMPEG_PATH variable to run `ffmpeg`, so the webservice sets this variable on start up (`src/service/api/index.ts`, l. 20), see:
+
+> Ffmpeg().setFfmpegPath("/opt/ffmpeg/bin/ffmpeg")
 
 ### Usage
 

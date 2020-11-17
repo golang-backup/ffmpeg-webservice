@@ -163,13 +163,191 @@
 					],
 					"remainingConversions": 1
 				}
+			},
+			"IFilter": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"input": {
+						"type": "string"
+					},
+					"multipleInputs": {
+						"type": "boolean"
+					},
+					"multipleOutputs": {
+						"type": "boolean"
+					},
+					"output": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"description",
+					"input",
+					"multipleInputs",
+					"multipleOutputs",
+					"output",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IFormat": {
+				"properties": {
+					"canDemux": {
+						"type": "boolean"
+					},
+					"canMux": {
+						"type": "boolean"
+					},
+					"description": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"canDemux",
+					"canMux",
+					"description",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ICodec": {
+				"properties": {
+					"type": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"canDecode": {
+						"type": "boolean"
+					},
+					"canEncode": {
+						"type": "boolean"
+					},
+					"drawHorizBand": {
+						"type": "boolean"
+					},
+					"directRendering": {
+						"type": "boolean"
+					},
+					"weirdFrameTruncation": {
+						"type": "boolean"
+					},
+					"intraFrameOnly": {
+						"type": "boolean"
+					},
+					"isLossy": {
+						"type": "boolean"
+					},
+					"isLossless": {
+						"type": "boolean"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"type",
+					"description",
+					"canDecode",
+					"canEncode",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IEncoder": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"directRendering": {
+						"type": "boolean"
+					},
+					"drawHorizBand": {
+						"type": "boolean"
+					},
+					"experimental": {
+						"type": "boolean"
+					},
+					"frameMT": {
+						"type": "boolean"
+					},
+					"sliceMT": {
+						"type": "boolean"
+					},
+					"type": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"description",
+					"directRendering",
+					"drawHorizBand",
+					"experimental",
+					"frameMT",
+					"sliceMT",
+					"type",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IFFmpegCapabilities": {
+				"properties": {
+					"filters": {
+						"items": {
+							"$ref": "#/components/schemas/IFilter"
+						},
+						"type": "array"
+					},
+					"formats": {
+						"items": {
+							"$ref": "#/components/schemas/IFormat"
+						},
+						"type": "array"
+					},
+					"codecs": {
+						"items": {
+							"$ref": "#/components/schemas/ICodec"
+						},
+						"type": "array"
+					},
+					"encoders": {
+						"items": {
+							"$ref": "#/components/schemas/IEncoder"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"filters",
+					"formats",
+					"codecs",
+					"encoders"
+				],
+				"type": "object",
+				"additionalProperties": false
 			}
 		},
 		"securitySchemes": {}
 	},
 	"info": {
 		"title": "ffmpeg-webservice",
-		"version": "0.1.0",
+		"version": "0.2.0",
 		"description": "REST api to convert files to different formats using ffmpeg",
 		"license": {
 			"name": "MIT"
@@ -269,17 +447,127 @@
 				]
 			}
 		},
-		"/formats": {
+		"/capabilities": {
 			"get": {
-				"operationId": "GetSupportedFormats",
+				"operationId": "GetAvailableCapabilities",
 				"responses": {
-					"204": {
-						"description": "No content"
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/IFFmpegCapabilities"
+								}
+							}
+						}
 					}
 				},
-				"description": "Returns a list of all possible formats to convert from and to.",
+				"description": "Returns a list of capabilities and options that \ncan be applied to an FFmpeg command.",
 				"tags": [
-					"Conversion-Formats"
+					"Capabilities"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/capabilities/filter": {
+			"get": {
+				"operationId": "GetAvailableFilter",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IFilter"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns all available filters that can be used for conversion.",
+				"tags": [
+					"Capabilities"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/capabilities/formats": {
+			"get": {
+				"operationId": "GetAvailableFormats",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IFormat"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns all available formats that can be converted with FFmpeg.",
+				"tags": [
+					"Capabilities"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/capabilities/codecs": {
+			"get": {
+				"operationId": "GetAvailableCodecs",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ICodec"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Capabilities"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/capabilities/encoders": {
+			"get": {
+				"operationId": "GetAvailableEncoders",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IEncoder"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns all available encoders FFmpeg is able to use.",
+				"tags": [
+					"Capabilities"
 				],
 				"security": [],
 				"parameters": []

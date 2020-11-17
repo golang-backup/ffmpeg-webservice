@@ -6,13 +6,15 @@
 	"author": "Sven Patrick Meier <sven.patrick.meier@team-parallax.com>",
 	"main": "src/app.ts",
 	"scripts": {
-		"test": "jest --config ./jest.config.js",
-		"preinstall": "npx use-yarn",
+		"build:docker": "docker build -t teamparallax/ffmpeg-webservice -f ./Dockerfile .",
 		"lint": "yarn eslint src --ext .ts --fix",
-		"tsoa:create": "tsoa spec && tsoa routes",
-		"tsoa:create:local": "yarn tsoa:create && sed -i 's/https/http/g' swagger.json",
 		"start": "ts-node src/app.ts",
-		"start:dev": "yarn tsoa:create:local && yarn start"
+		"start:dev": "yarn tsoa:create:local && yarn start",
+		"start:docker": "docker run --name ffmpeg-web -p 3000:3000 teamparallax/ffmpeg-webservice",
+		"start:docker:dev": "yarn run build:docker && yarn run start:docker",
+		"test": "jest --config ./jest.config.js",
+		"tsoa:create": "tsoa spec --host $HOST && tsoa routes",
+		"tsoa:create:local": "yarn tsoa:create --host 'localhost:3000' && sed -i 's/https/http/g' swagger.json"
 	},
 	"dependencies": {
 		"body-parser": "^1.19.0",

@@ -5,7 +5,7 @@ import { Controller, ValidationService, FieldErrors, ValidateError, TsoaRoute, H
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 import { ConversionController } from './../controller/conversion/index';
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-import { IndexController } from './../controller/index';
+import { CapabilityController } from './../controller/index';
 import * as express from 'express';
 
 // WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -49,6 +49,74 @@ const models: TsoaRoute.Models = {
 		"properties": {
 			"conversions": { "dataType": "array", "array": { "ref": "IConversionStatus" }, "required": true },
 			"remainingConversions": { "dataType": "double", "required": true },
+		},
+		"additionalProperties": false,
+	},
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	"IFilter": {
+		"dataType": "refObject",
+		"properties": {
+			"description": { "dataType": "string", "required": true },
+			"input": { "dataType": "string", "required": true },
+			"multipleInputs": { "dataType": "boolean", "required": true },
+			"multipleOutputs": { "dataType": "boolean", "required": true },
+			"output": { "dataType": "string", "required": true },
+			"name": { "dataType": "string", "required": true },
+		},
+		"additionalProperties": false,
+	},
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	"IFormat": {
+		"dataType": "refObject",
+		"properties": {
+			"canDemux": { "dataType": "boolean", "required": true },
+			"canMux": { "dataType": "boolean", "required": true },
+			"description": { "dataType": "string", "required": true },
+			"name": { "dataType": "string", "required": true },
+		},
+		"additionalProperties": false,
+	},
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	"ICodec": {
+		"dataType": "refObject",
+		"properties": {
+			"type": { "dataType": "string", "required": true },
+			"description": { "dataType": "string", "required": true },
+			"canDecode": { "dataType": "boolean", "required": true },
+			"canEncode": { "dataType": "boolean", "required": true },
+			"drawHorizBand": { "dataType": "boolean" },
+			"directRendering": { "dataType": "boolean" },
+			"weirdFrameTruncation": { "dataType": "boolean" },
+			"intraFrameOnly": { "dataType": "boolean" },
+			"isLossy": { "dataType": "boolean" },
+			"isLossless": { "dataType": "boolean" },
+			"name": { "dataType": "string", "required": true },
+		},
+		"additionalProperties": false,
+	},
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	"IEncoder": {
+		"dataType": "refObject",
+		"properties": {
+			"description": { "dataType": "string", "required": true },
+			"directRendering": { "dataType": "boolean", "required": true },
+			"drawHorizBand": { "dataType": "boolean", "required": true },
+			"experimental": { "dataType": "boolean", "required": true },
+			"frameMT": { "dataType": "boolean", "required": true },
+			"sliceMT": { "dataType": "boolean", "required": true },
+			"type": { "dataType": "string", "required": true },
+			"name": { "dataType": "string", "required": true },
+		},
+		"additionalProperties": false,
+	},
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	"IFFmpegCapabilities": {
+		"dataType": "refObject",
+		"properties": {
+			"filters": { "dataType": "array", "array": { "ref": "IFilter" }, "required": true },
+			"formats": { "dataType": "array", "array": { "ref": "IFormat" }, "required": true },
+			"codecs": { "dataType": "array", "array": { "ref": "ICodec" }, "required": true },
+			"encoders": { "dataType": "array", "array": { "ref": "IEncoder" }, "required": true },
 		},
 		"additionalProperties": false,
 	},
@@ -128,7 +196,7 @@ export function RegisterRoutes(app: express.Express) {
 			promiseHandler(controller, promise, response, next);
 		});
 	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-	app.get('/formats',
+	app.get('/capabilities',
 		function(request: any, response: any, next: any) {
 			const args = {
 			};
@@ -142,10 +210,94 @@ export function RegisterRoutes(app: express.Express) {
 				return next(err);
 			}
 
-			const controller = new IndexController();
+			const controller = new CapabilityController();
 
 
-			const promise = controller.getSupportedFormats.apply(controller, validatedArgs as any);
+			const promise = controller.getAvailableCapabilities.apply(controller, validatedArgs as any);
+			promiseHandler(controller, promise, response, next);
+		});
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	app.get('/capabilities/filter',
+		function(request: any, response: any, next: any) {
+			const args = {
+			};
+
+			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+			let validatedArgs: any[] = [];
+			try {
+				validatedArgs = getValidatedArgs(args, request, response);
+			} catch (err) {
+				return next(err);
+			}
+
+			const controller = new CapabilityController();
+
+
+			const promise = controller.getAvailableFilter.apply(controller, validatedArgs as any);
+			promiseHandler(controller, promise, response, next);
+		});
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	app.get('/capabilities/formats',
+		function(request: any, response: any, next: any) {
+			const args = {
+			};
+
+			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+			let validatedArgs: any[] = [];
+			try {
+				validatedArgs = getValidatedArgs(args, request, response);
+			} catch (err) {
+				return next(err);
+			}
+
+			const controller = new CapabilityController();
+
+
+			const promise = controller.getAvailableFormats.apply(controller, validatedArgs as any);
+			promiseHandler(controller, promise, response, next);
+		});
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	app.get('/capabilities/codecs',
+		function(request: any, response: any, next: any) {
+			const args = {
+			};
+
+			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+			let validatedArgs: any[] = [];
+			try {
+				validatedArgs = getValidatedArgs(args, request, response);
+			} catch (err) {
+				return next(err);
+			}
+
+			const controller = new CapabilityController();
+
+
+			const promise = controller.getAvailableCodecs.apply(controller, validatedArgs as any);
+			promiseHandler(controller, promise, response, next);
+		});
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	app.get('/capabilities/encoders',
+		function(request: any, response: any, next: any) {
+			const args = {
+			};
+
+			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+			let validatedArgs: any[] = [];
+			try {
+				validatedArgs = getValidatedArgs(args, request, response);
+			} catch (err) {
+				return next(err);
+			}
+
+			const controller = new CapabilityController();
+
+
+			const promise = controller.getAvailableEncoders.apply(controller, validatedArgs as any);
 			promiseHandler(controller, promise, response, next);
 		});
 	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

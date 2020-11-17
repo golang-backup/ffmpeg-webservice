@@ -7,7 +7,8 @@ import express, {
 } from "express"
 import swaggerDocument from "../../../swagger.json"
 import swaggerUi from "swagger-ui-express"
-export class Server {
+import Ffmpeg from "fluent-ffmpeg"
+export class Api {
 	private readonly _port: number
 	private readonly app: Application
 	private readonly defaultPort: number = 3000
@@ -16,6 +17,7 @@ export class Server {
 		this._port = port ?? this.defaultPort
 		this.configureServer()
 		this.addApi()
+		Ffmpeg().setFfmpegPath("/opt/ffmpeg/bin/ffmpeg")
 	}
 	listen = (): void => {
 		this.app.listen(this.port, () => {

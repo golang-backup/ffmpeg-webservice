@@ -10,7 +10,6 @@ import {
 } from "./interface"
 import { Inject } from "typescript-ioc"
 import { Logger } from "../logger"
-// Import { UnoconvService } from "../unoconv"
 import { v4 as uuidV4 } from "uuid"
 import { writeToFile } from "../file-io"
 export class ConversionService {
@@ -42,12 +41,6 @@ export class ConversionService {
 			this.queueService.changeConvLogEntry(conversionId, EConversionStatus.processing)
 			try {
 				// Todo: Implement wrapper.
-				// Const resp = await UnoconvService.convertToTarget({
-				// 	ConversionId,
-				// 	FilePath: path,
-				// 	OutputFilename: name,
-				// 	TargetFormat
-				// })
 				// Await deleteFile(path)
 				// This.conversionQueueService.addToConvertedQueue(
 				// 	ConversionId,

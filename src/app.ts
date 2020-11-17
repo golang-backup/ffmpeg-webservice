@@ -1,3 +1,3 @@
-import { Server } from "./service/api"
-const server = new Server()
+import { Api } from "./service/api"
+const server = new Api()
 server.listen()

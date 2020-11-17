@@ -1,5 +1,8 @@
 FROM alfg/ffmpeg:latest
 
+ARG host
+ENV HOST=$host
+
 WORKDIR /app
 
 ADD . /app
@@ -14,3 +17,5 @@ RUN apk --no-cache \
     && ffmpeg -buildconf \
     && npm install -g yarn \
 	&& yarn install
+
+CMD [ "yarn", "start" ]
