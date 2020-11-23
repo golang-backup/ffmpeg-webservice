@@ -4,6 +4,10 @@ This project provides a webservice with a REST-API for file-conversions using `f
 
 ## Prerequisites
 
+1. FFmpeg needs to be installed on your local machine if you are not running the webservice in a docker. In order to get everything working read this [ffmpeg](#correct-path-for-ffmpeg)
+
+2. Docker installation (required to build an run a container)
+
 ### Correct path for ffmpeg
 
 In order to work properly a correct set PATH variable for ffmpeg needs to exist. When running this webservice within this docker (based on `alfg/ffmpeg:latest`) the ffmpeg installation path is `/opt/ffmpeg/bin/ffmpeg`. The used library `fluent-ffmpeg` will use the value of FFMPEG_PATH variable to run `ffmpeg`, so the webservice sets this variable on start up (`src/service/api/index.ts`, l. 20), see:
@@ -16,7 +20,7 @@ You can either build this project from source or use a built docker image.
 
 #### Building from source
 
-If the above mentioned requirements are met one can run the service using the command:
+If the above mentioned [requirements](#prerequisites) are met one can run the service using the command:
 
 ```console
 yarn run start
@@ -33,10 +37,6 @@ yarn run build:docker
 # running the container
 yarn run start:docker
 ```
-
-#### Run in Docker
-
-// Tbd
 
 ### Swagger API
 
