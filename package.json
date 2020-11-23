@@ -12,7 +12,7 @@
 		"start:dev": "yarn tsoa:create:local && yarn start",
 		"start:docker": "docker run --name ffmpeg-web -p 3000:3000 teamparallax/ffmpeg-webservice",
 		"start:docker:dev": "yarn run build:docker && yarn run start:docker",
-		"test": "jest --config ./jest.config.js",
+		"test": "jest --config ./jest.config.js --detectOpenHandles",
 		"tsoa:create": "tsoa spec --host $HOST && tsoa routes",
 		"tsoa:create:local": "yarn tsoa:create --host 'localhost:3000' && sed -i 's/https/http/g' swagger.json"
 	},

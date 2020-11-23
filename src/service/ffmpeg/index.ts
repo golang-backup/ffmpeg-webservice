@@ -26,13 +26,13 @@ export class FFmpegWrapper {
 		return await new Promise((resolve, reject) => {
 			try {
 				const delay = 2000
-				const inputFile = getReadableObjectFromFile(inputFilePath)
+				const inputFile = path.join(basePath, inputFilePath)
 				const outPath = path.join(basePath, "output")
 				const outputFile = `${outPath}/${outputName}.${targetFormat}`
 				this.logger.log(
-					`IN: ${inputFilePath}\nOUT: ${outputFile}`
+					`IN: ${inputFile}\nOUT: ${outputFile}`
 				)
-				const ffmpegCommand: FfmpegCommand = Ffmpeg(inputFilePath)
+				const ffmpegCommand: FfmpegCommand = Ffmpeg(inputFile)
 					.format(targetFormat)
 				if (options?.filter) {
 					ffmpegCommand.addOptions(options?.filter as string[])
