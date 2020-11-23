@@ -1,14 +1,20 @@
 import { EHttpResponseCodes } from "../../constants"
 import { RegisterRoutes } from "../../routes/routes"
+import { createDirectoryIfNotPresent } from "../file-io"
+import Ffmpeg from "fluent-ffmpeg"
 import bodyParser from "body-parser"
 import cors from "cors"
 import express, {
 	Application, Express, NextFunction, Request, Response
 } from "express"
+import path from "path"
 import swaggerDocument from "../../../swagger.json"
 import swaggerUi from "swagger-ui-express"
-import Ffmpeg from "fluent-ffmpeg"
+import { Logger } from "../logger"
+import { Inject } from "typescript-ioc"
 export class Api {
+	@Inject
+	private readonly logger!: Logger
 	private readonly _port: number
 	private readonly app: Application
 	private readonly defaultPort: number = 3000
@@ -18,10 +24,12 @@ export class Api {
 		this.configureServer()
 		this.addApi()
 		Ffmpeg().setFfmpegPath("/opt/ffmpeg/bin/ffmpeg")
+		this.createApplicationDirectiories(["input", "output"])
+		setTimeout(() => this.listen(), 1500)
 	}
 	listen = (): void => {
 		this.app.listen(this.port, () => {
-			console.log(`Listening on port ${this.port}`)
+			this.logger.log(`Listening on port ${this.port}`)
 		})
 	}
 	private readonly addApi = (): void => {
@@ -38,7 +46,7 @@ export class Api {
 			next: NextFunction
 		) => {
 			const status = err.status || EHttpResponseCodes.internalServerError
-			console.error(err)
+			this.logger.error(err)
 			const body: any = {
 				fields: err.fields || undefined,
 				message: err.message || "An error occurred during the request.",
@@ -67,6 +75,17 @@ export class Api {
 			console.log(`Request received: ${req.method} ${req.url}`)
 			next()
 		})
+	}
+	private createApplicationDirectiories(directories: string[]): void {
+		const basePath = path.join(__dirname, "../../..")
+		const promises = []
+		for (const directory of directories) {
+			promises.push(createDirectoryIfNotPresent(path.join(basePath, directory)))
+		}	
+		
+		Promise.all(promises)
+			.then(res => console.log(res))
+			.catch(console.error)
 	}
 	get port(): number {
 		return this._port

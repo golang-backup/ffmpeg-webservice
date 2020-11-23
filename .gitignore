@@ -4,6 +4,9 @@
 node_modules
 dist
 build
+sample-input/
+output/
+input/
 # IDE files
 idea/
 .vscode

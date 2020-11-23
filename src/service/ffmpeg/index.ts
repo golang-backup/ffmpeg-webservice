@@ -1,5 +1,6 @@
 import {
 	ICodecData,
+	IConversionResult,
 	IEncoderData,
 	IFFmpegCapabilitiesObject,
 	IFilterData,
@@ -8,6 +9,8 @@ import {
 } from "./interface"
 import { Inject } from "typescript-ioc"
 import { Logger } from "../logger"
+import { basePath } from "../../constants"
+import { getReadableObjectFromFile } from "../file-io"
 import Ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
 import path from "path"
 export class FFmpegWrapper {
@@ -15,25 +18,36 @@ export class FFmpegWrapper {
 	private readonly logger!: Logger
 	async convertToTargetFormat(
 		inputFilePath: string,
-		outputPath: string,
+		outputName: string,
+		sourceFormat: string,
 		targetFormat: string,
 		options?: IOptions
-	): Promise<unknown> {
+	): Promise<IConversionResult> {
 		return await new Promise((resolve, reject) => {
 			try {
-				const ffmpegCommand: FfmpegCommand = Ffmpeg(path.join(__dirname,inputFilePath))
-					.saveToFile(`${path.join(__dirname, outputPath)}.${targetFormat}`)
-				if (options?.filter !== []) {
+				const delay = 2000
+				const inputFile = getReadableObjectFromFile(inputFilePath)
+				const outPath = path.join(basePath, "output")
+				const outputFile = `${outPath}/${outputName}.${targetFormat}`
+				this.logger.log(
+					`IN: ${inputFilePath}\nOUT: ${outputFile}`
+				)
+				const ffmpegCommand: FfmpegCommand = Ffmpeg(inputFilePath)
+					.format(targetFormat)
+				if (options?.filter) {
 					ffmpegCommand.addOptions(options?.filter as string[])
 				}
-				if (options?.encoder !== []) {
+				if (options?.encoder) {
 					ffmpegCommand.addOptions(options?.encoder as string[])
 				}
-				ffmpegCommand.run()
-				resolve("Done.")
+				ffmpegCommand.save(outputFile).run()
+				// This.logger.log(JSON.stringify(ffmpegCommand))
+				setTimeout(() => resolve({
+					outputFilepath: outputFile
+				}), delay)
 			}
 			catch (err) {
-				reject(err)
+				reject(`FROM WITHIN CONVERSION${ err}`)
 			}
 		})
 	}

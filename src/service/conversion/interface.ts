@@ -10,7 +10,8 @@ export interface IConversionInQueue extends IConversionStatus {
 }
 export interface IConversionInProgress extends IConversionStatus {}
 export interface IConversionFinished extends IConversionStatus {
-	resultFile: Buffer
+	resultFile: Buffer,
+	resultFilePath: string
 }
 /**
  * @tsoaModel
@@ -85,6 +86,7 @@ export interface IConversionRequest {
 	isConverted: boolean,
 	name: string,
 	path: string,
+	sourceFormat: string,
 	targetFormat: string
 }
 /**
@@ -95,7 +97,7 @@ export interface IConversionRequest {
  *	"result": {
  *		"conversionId": "55309c37-aed3-4ee9-a143-f1e305333189",
  *		"name": "testFile",
- *		"path": "./out/55309c37-aed3-4ee9-a143-f1e305333189.pdf",
+ *		"path": "./output/55309c37-aed3-4ee9-a143-f1e305333189.pdf",
  *		"resultFile": {
  *			"type":"Buffer",
  *			"data": [

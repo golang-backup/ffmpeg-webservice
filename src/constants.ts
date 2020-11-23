@@ -1,3 +1,4 @@
+import path from "path"
 export enum EHttpResponseCodes {
     ok = 200,
     created = 201,
@@ -9,6 +10,7 @@ export enum EHttpResponseCodes {
     internalServerError = 500,
     unavailable = 503
 }
+export const basePath: string = path.join(__dirname, "../")
 export class ConversionError extends Error {
 	readonly name: string
 	constructor(message: string) {

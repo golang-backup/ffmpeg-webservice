@@ -21,87 +21,6 @@
 					"conversionId": "55309c37-aed3-4ee9-a143-f1e305333189"
 				}
 			},
-			"IConversionRequestBody": {
-				"properties": {
-					"file": {
-						"type": "string",
-						"format": "byte"
-					},
-					"filename": {
-						"type": "string"
-					},
-					"originalFormat": {
-						"type": "string"
-					},
-					"targetFormat": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"file",
-					"filename",
-					"originalFormat",
-					"targetFormat"
-				],
-				"type": "object",
-				"additionalProperties": false,
-				"example": {
-					"file": {
-						"type": "Buffer",
-						"data": [
-							67,
-							111,
-							110,
-							118,
-							101,
-							114,
-							116,
-							101,
-							100,
-							32,
-							118,
-							105,
-							97,
-							32,
-							116,
-							101,
-							97,
-							109,
-							112,
-							97,
-							114,
-							97,
-							108,
-							108,
-							97,
-							120,
-							47,
-							117,
-							110,
-							111,
-							99,
-							111,
-							110,
-							118,
-							45,
-							119,
-							101,
-							98,
-							115,
-							101,
-							114,
-							118,
-							105,
-							99,
-							101,
-							10
-						]
-					},
-					"filename": "assignment1",
-					"originalFormat": "docx",
-					"targetFormat": "pdf"
-				}
-			},
 			"EConversionStatus": {
 				"enum": [
 					"converted",
@@ -164,6 +83,102 @@
 					"remainingConversions": 1
 				}
 			},
+			"ICodec": {
+				"properties": {
+					"canDecode": {
+						"type": "boolean"
+					},
+					"canEncode": {
+						"type": "boolean"
+					},
+					"description": {
+						"type": "string"
+					},
+					"directRendering": {
+						"type": "boolean"
+					},
+					"drawHorizBand": {
+						"type": "boolean"
+					},
+					"intraFrameOnly": {
+						"type": "boolean"
+					},
+					"isLossless": {
+						"type": "boolean"
+					},
+					"isLossy": {
+						"type": "boolean"
+					},
+					"type": {
+						"type": "string"
+					},
+					"weirdFrameTruncation": {
+						"type": "boolean"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"canDecode",
+					"canEncode",
+					"description",
+					"type",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false,
+				"example": {
+					"type": "audio",
+					"description": "(decoders: mp3float mp3 ) (encoders: libmp3lame )",
+					"canDecode": true,
+					"canEncode": true,
+					"intraFrameOnly": true,
+					"isLossy": true,
+					"isLossless": false,
+					"name": "mp3"
+				}
+			},
+			"IEncoder": {
+				"properties": {
+					"description": {
+						"type": "string"
+					},
+					"directRendering": {
+						"type": "boolean"
+					},
+					"drawHorizBand": {
+						"type": "boolean"
+					},
+					"experimental": {
+						"type": "boolean"
+					},
+					"frameMT": {
+						"type": "boolean"
+					},
+					"sliceMT": {
+						"type": "boolean"
+					},
+					"type": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"description",
+					"directRendering",
+					"drawHorizBand",
+					"experimental",
+					"frameMT",
+					"sliceMT",
+					"type",
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"IFilter": {
 				"properties": {
 					"description": {
@@ -220,116 +235,8 @@
 				"type": "object",
 				"additionalProperties": false
 			},
-			"ICodec": {
-				"properties": {
-					"type": {
-						"type": "string"
-					},
-					"description": {
-						"type": "string"
-					},
-					"canDecode": {
-						"type": "boolean"
-					},
-					"canEncode": {
-						"type": "boolean"
-					},
-					"drawHorizBand": {
-						"type": "boolean"
-					},
-					"directRendering": {
-						"type": "boolean"
-					},
-					"weirdFrameTruncation": {
-						"type": "boolean"
-					},
-					"intraFrameOnly": {
-						"type": "boolean"
-					},
-					"isLossy": {
-						"type": "boolean"
-					},
-					"isLossless": {
-						"type": "boolean"
-					},
-					"name": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"type",
-					"description",
-					"canDecode",
-					"canEncode",
-					"name"
-				],
-				"type": "object",
-				"additionalProperties": false,
-				"example": {
-					"type": "audio",
-					"description": "(decoders: mp3float mp3 ) (encoders: libmp3lame )",
-					"canDecode": true,
-					"canEncode": true,
-					"intraFrameOnly": true,
-					"isLossy": true,
-					"isLossless": false,
-					"name": "mp3"
-				}
-			},
-			"IEncoder": {
-				"properties": {
-					"description": {
-						"type": "string"
-					},
-					"directRendering": {
-						"type": "boolean"
-					},
-					"drawHorizBand": {
-						"type": "boolean"
-					},
-					"experimental": {
-						"type": "boolean"
-					},
-					"frameMT": {
-						"type": "boolean"
-					},
-					"sliceMT": {
-						"type": "boolean"
-					},
-					"type": {
-						"type": "string"
-					},
-					"name": {
-						"type": "string"
-					}
-				},
-				"required": [
-					"description",
-					"directRendering",
-					"drawHorizBand",
-					"experimental",
-					"frameMT",
-					"sliceMT",
-					"type",
-					"name"
-				],
-				"type": "object",
-				"additionalProperties": false
-			},
 			"IFFmpegCapabilities": {
 				"properties": {
-					"filters": {
-						"items": {
-							"$ref": "#/components/schemas/IFilter"
-						},
-						"type": "array"
-					},
-					"formats": {
-						"items": {
-							"$ref": "#/components/schemas/IFormat"
-						},
-						"type": "array"
-					},
 					"codecs": {
 						"items": {
 							"$ref": "#/components/schemas/ICodec"
@@ -341,13 +248,25 @@
 							"$ref": "#/components/schemas/IEncoder"
 						},
 						"type": "array"
+					},
+					"filters": {
+						"items": {
+							"$ref": "#/components/schemas/IFilter"
+						},
+						"type": "array"
+					},
+					"formats": {
+						"items": {
+							"$ref": "#/components/schemas/IFormat"
+						},
+						"type": "array"
 					}
 				},
 				"required": [
-					"filters",
-					"formats",
 					"codecs",
-					"encoders"
+					"encoders",
+					"filters",
+					"formats"
 				],
 				"type": "object",
 				"additionalProperties": false
@@ -391,19 +310,30 @@
 				"security": [],
 				"parameters": [],
 				"requestBody": {
-					"description": "contains the file to convert",
 					"required": true,
 					"content": {
-						"application/json": {
+						"multipart/form-data": {
 							"schema": {
-								"$ref": "#/components/schemas/IConversionRequestBody"
+								"type": "object",
+								"properties": {
+									"conversionFile": {
+										"type": "string",
+										"format": "binary"
+									},
+									"originalFormat": {
+										"type": "string"
+									},
+									"targetFormat": {
+										"type": "string"
+									}
+								}
 							}
 						}
 					}
 				}
 			},
 			"get": {
-				"operationId": "GetConversions",
+				"operationId": "GetConversionQueueStatus",
 				"responses": {
 					"200": {
 						"description": "Ok",
@@ -424,7 +354,7 @@
 				"parameters": []
 			}
 		},
-		"/conversion/{fileId}": {
+		"/conversion/{conversionId}": {
 			"get": {
 				"operationId": "GetConvertedFile",
 				"responses": {
@@ -448,9 +378,55 @@
 					{
 						"description": "Unique identifier for the conversion of a file.",
 						"in": "path",
-						"name": "fileId",
+						"name": "conversionId",
 						"required": true,
 						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/conversion/{conversionId}/download": {
+			"get": {
+				"operationId": "GetConvertedFileDownload",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {}
+							},
+							"application/pdf": {
+								"schema": {
+									"type": "string",
+									"format": "byte"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns the current status for a conversion given a conversionId\nIf status is 'converted' the resulting converted file\nwill be available to download.",
+				"tags": [
+					"Conversion"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "the id of the file-conversion that is requested",
+						"in": "path",
+						"name": "conversionId",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "extension",
+						"required": false,
+						"schema": {
+							"default": "mp3",
 							"type": "string"
 						}
 					}
@@ -472,7 +448,58 @@
 						}
 					}
 				},
-				"description": "Returns a list of capabilities and options that \ncan be applied to an FFmpeg command.",
+				"description": "Returns a list of capabilities and options that\ncan be applied to an FFmpeg command.",
+				"tags": [
+					"Capabilities"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/capabilities/codecs": {
+			"get": {
+				"operationId": "GetAvailableCodecs",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/ICodec"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Capabilities"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/capabilities/encoders": {
+			"get": {
+				"operationId": "GetAvailableEncoders",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/IEncoder"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns all available encoders FFmpeg is able to use.",
 				"tags": [
 					"Capabilities"
 				],
@@ -525,57 +552,6 @@
 					}
 				},
 				"description": "Returns all available formats that can be converted with FFmpeg.",
-				"tags": [
-					"Capabilities"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/capabilities/codecs": {
-			"get": {
-				"operationId": "GetAvailableCodecs",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/ICodec"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"tags": [
-					"Capabilities"
-				],
-				"security": [],
-				"parameters": []
-			}
-		},
-		"/capabilities/encoders": {
-			"get": {
-				"operationId": "GetAvailableEncoders",
-				"responses": {
-					"200": {
-						"description": "Ok",
-						"content": {
-							"application/json": {
-								"schema": {
-									"items": {
-										"$ref": "#/components/schemas/IEncoder"
-									},
-									"type": "array"
-								}
-							}
-						}
-					}
-				},
-				"description": "Returns all available encoders FFmpeg is able to use.",
 				"tags": [
 					"Capabilities"
 				],

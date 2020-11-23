@@ -1,9 +1,11 @@
 // #region Review
-export interface IConvertedFile {
+export interface IConvertedFile extends IConversionResult {
 	// TODO: review if this is sufficient for usecase.
 	outputFilename: string,
-	path: string,
-	resultFile: Buffer
+	resultFile?: Buffer
+}
+export interface IConversionResult{
+	outputFilepath: string
 }
 export interface IConversionParams {
 	// TODO: review if this is sufficient for usecase.

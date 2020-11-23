@@ -11,10 +11,15 @@ import {
 import { Inject } from "typescript-ioc"
 import { Logger } from "../logger"
 import { v4 as uuidV4 } from "uuid"
-import { writeToFile } from "../file-io"
+import { deleteFile, writeToFile } from "../file-io"
+import { FFmpegWrapper } from "../ffmpeg"
+import { IConversionResult } from "../ffmpeg/interface"
+import { basePath } from "../../constants"
 export class ConversionService {
 	@Inject
 	private readonly conversionQueueService!: ConversionQueueService
+	@Inject
+	private readonly ffmpeg!: FFmpegWrapper
 	@Inject
 	private readonly logger!: Logger
 	public addToConversionQueue(requestObject: IConversionRequest): IConversionProcessingResponse {
@@ -27,13 +32,14 @@ export class ConversionService {
 			conversionId
 		}
 	}
-	convertFile(): void {
+	async convertFile(): Promise<void> {
 		const fileToProcess = this.queueService.getNextQueueElement()
 		if (fileToProcess) {
 			const {
 				conversionId,
 				name,
 				path,
+				sourceFormat,
 				targetFormat
 			} = fileToProcess
 			this.queueService.isCurrentlyConverting = true
@@ -41,15 +47,20 @@ export class ConversionService {
 			this.queueService.changeConvLogEntry(conversionId, EConversionStatus.processing)
 			try {
 				// Todo: Implement wrapper.
-				// Await deleteFile(path)
-				// This.conversionQueueService.addToConvertedQueue(
-				// 	ConversionId,
-				// 	Resp
-				// )
+				const conversionResponse: IConversionResult = await this.ffmpeg.convertToTargetFormat(path, conversionId,sourceFormat, targetFormat)
+				// await deleteFile(path)
+				this.conversionQueueService.addToConvertedQueue(
+					conversionId,
+					{
+						outputFilename: name,
+						outputFilepath: conversionResponse.outputFilepath
+					}
+				)
 				this.queueService.changeConvLogEntry(conversionId, EConversionStatus.converted)
 			}
 			catch (err) {
-				this.logger.error(err)
+				
+				this.logger.error("FROM CATCH AFTER CONVERSION SHOULD BE DONE" + err)
 			}
 			finally {
 				// Todo: refactor/replace with function
@@ -89,13 +100,14 @@ export class ConversionService {
 		targetFormat
 	}: IConversionRequestBody): Promise<IConversionProcessingResponse> {
 		const conversionId = uuidV4()
-		const inPath = `./input/${conversionId}.${originalFormat}`
+		const inPath = `${basePath}input/${conversionId}.${originalFormat}`
 		await writeToFile(inPath, file)
 		const request: IConversionRequest = {
 			conversionId,
 			isConverted: false,
 			name: filename,
 			path: inPath,
+			sourceFormat: originalFormat,
 			targetFormat
 		}
 		return this.addToConversionQueue(request)

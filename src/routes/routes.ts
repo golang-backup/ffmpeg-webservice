@@ -19,17 +19,6 @@ const models: TsoaRoute.Models = {
 		"additionalProperties": false,
 	},
 	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-	"IConversionRequestBody": {
-		"dataType": "refObject",
-		"properties": {
-			"file": { "dataType": "buffer", "required": true },
-			"filename": { "dataType": "string", "required": true },
-			"originalFormat": { "dataType": "string", "required": true },
-			"targetFormat": { "dataType": "string", "required": true },
-		},
-		"additionalProperties": false,
-	},
-	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 	"EConversionStatus": {
 		"dataType": "refEnum",
 		"enums": ["converted", "in queue", "processing"],
@@ -49,6 +38,39 @@ const models: TsoaRoute.Models = {
 		"properties": {
 			"conversions": { "dataType": "array", "array": { "ref": "IConversionStatus" }, "required": true },
 			"remainingConversions": { "dataType": "double", "required": true },
+		},
+		"additionalProperties": false,
+	},
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	"ICodec": {
+		"dataType": "refObject",
+		"properties": {
+			"canDecode": { "dataType": "boolean", "required": true },
+			"canEncode": { "dataType": "boolean", "required": true },
+			"description": { "dataType": "string", "required": true },
+			"directRendering": { "dataType": "boolean" },
+			"drawHorizBand": { "dataType": "boolean" },
+			"intraFrameOnly": { "dataType": "boolean" },
+			"isLossless": { "dataType": "boolean" },
+			"isLossy": { "dataType": "boolean" },
+			"type": { "dataType": "string", "required": true },
+			"weirdFrameTruncation": { "dataType": "boolean" },
+			"name": { "dataType": "string", "required": true },
+		},
+		"additionalProperties": false,
+	},
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	"IEncoder": {
+		"dataType": "refObject",
+		"properties": {
+			"description": { "dataType": "string", "required": true },
+			"directRendering": { "dataType": "boolean", "required": true },
+			"drawHorizBand": { "dataType": "boolean", "required": true },
+			"experimental": { "dataType": "boolean", "required": true },
+			"frameMT": { "dataType": "boolean", "required": true },
+			"sliceMT": { "dataType": "boolean", "required": true },
+			"type": { "dataType": "string", "required": true },
+			"name": { "dataType": "string", "required": true },
 		},
 		"additionalProperties": false,
 	},
@@ -77,46 +99,13 @@ const models: TsoaRoute.Models = {
 		"additionalProperties": false,
 	},
 	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-	"ICodec": {
-		"dataType": "refObject",
-		"properties": {
-			"type": { "dataType": "string", "required": true },
-			"description": { "dataType": "string", "required": true },
-			"canDecode": { "dataType": "boolean", "required": true },
-			"canEncode": { "dataType": "boolean", "required": true },
-			"drawHorizBand": { "dataType": "boolean" },
-			"directRendering": { "dataType": "boolean" },
-			"weirdFrameTruncation": { "dataType": "boolean" },
-			"intraFrameOnly": { "dataType": "boolean" },
-			"isLossy": { "dataType": "boolean" },
-			"isLossless": { "dataType": "boolean" },
-			"name": { "dataType": "string", "required": true },
-		},
-		"additionalProperties": false,
-	},
-	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-	"IEncoder": {
-		"dataType": "refObject",
-		"properties": {
-			"description": { "dataType": "string", "required": true },
-			"directRendering": { "dataType": "boolean", "required": true },
-			"drawHorizBand": { "dataType": "boolean", "required": true },
-			"experimental": { "dataType": "boolean", "required": true },
-			"frameMT": { "dataType": "boolean", "required": true },
-			"sliceMT": { "dataType": "boolean", "required": true },
-			"type": { "dataType": "string", "required": true },
-			"name": { "dataType": "string", "required": true },
-		},
-		"additionalProperties": false,
-	},
-	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
 	"IFFmpegCapabilities": {
 		"dataType": "refObject",
 		"properties": {
-			"filters": { "dataType": "array", "array": { "ref": "IFilter" }, "required": true },
-			"formats": { "dataType": "array", "array": { "ref": "IFormat" }, "required": true },
 			"codecs": { "dataType": "array", "array": { "ref": "ICodec" }, "required": true },
 			"encoders": { "dataType": "array", "array": { "ref": "IEncoder" }, "required": true },
+			"filters": { "dataType": "array", "array": { "ref": "IFilter" }, "required": true },
+			"formats": { "dataType": "array", "array": { "ref": "IFormat" }, "required": true },
 		},
 		"additionalProperties": false,
 	},
@@ -134,7 +123,7 @@ export function RegisterRoutes(app: express.Express) {
 	app.post('/conversion',
 		function(request: any, response: any, next: any) {
 			const args = {
-				conversionRequestBody: { "in": "body", "name": "conversionRequestBody", "required": true, "ref": "IConversionRequestBody" },
+				request: { "in": "request", "name": "request", "required": true, "dataType": "object" },
 			};
 
 			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -170,14 +159,14 @@ export function RegisterRoutes(app: express.Express) {
 			const controller = new ConversionController();
 
 
-			const promise = controller.getConversions.apply(controller, validatedArgs as any);
+			const promise = controller.getConversionQueueStatus.apply(controller, validatedArgs as any);
 			promiseHandler(controller, promise, response, next);
 		});
 	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-	app.get('/conversion/:fileId',
+	app.get('/conversion/:conversionId',
 		function(request: any, response: any, next: any) {
 			const args = {
-				fileId: { "in": "path", "name": "fileId", "required": true, "dataType": "string" },
+				conversionId: { "in": "path", "name": "conversionId", "required": true, "dataType": "string" },
 			};
 
 			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -193,6 +182,29 @@ export function RegisterRoutes(app: express.Express) {
 
 
 			const promise = controller.getConvertedFile.apply(controller, validatedArgs as any);
+			promiseHandler(controller, promise, response, next);
+		});
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	app.get('/conversion/:conversionId/download',
+		function(request: any, response: any, next: any) {
+			const args = {
+				conversionId: { "in": "path", "name": "conversionId", "required": true, "dataType": "string" },
+				extension: { "default": "mp3", "in": "query", "name": "extension", "dataType": "string" },
+			};
+
+			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+			let validatedArgs: any[] = [];
+			try {
+				validatedArgs = getValidatedArgs(args, request, response);
+			} catch (err) {
+				return next(err);
+			}
+
+			const controller = new ConversionController();
+
+
+			const promise = controller.getConvertedFileDownload.apply(controller, validatedArgs as any);
 			promiseHandler(controller, promise, response, next);
 		});
 	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -214,48 +226,6 @@ export function RegisterRoutes(app: express.Express) {
 
 
 			const promise = controller.getAvailableCapabilities.apply(controller, validatedArgs as any);
-			promiseHandler(controller, promise, response, next);
-		});
-	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-	app.get('/capabilities/filter',
-		function(request: any, response: any, next: any) {
-			const args = {
-			};
-
-			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-			let validatedArgs: any[] = [];
-			try {
-				validatedArgs = getValidatedArgs(args, request, response);
-			} catch (err) {
-				return next(err);
-			}
-
-			const controller = new CapabilityController();
-
-
-			const promise = controller.getAvailableFilter.apply(controller, validatedArgs as any);
-			promiseHandler(controller, promise, response, next);
-		});
-	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-	app.get('/capabilities/formats',
-		function(request: any, response: any, next: any) {
-			const args = {
-			};
-
-			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
-
-			let validatedArgs: any[] = [];
-			try {
-				validatedArgs = getValidatedArgs(args, request, response);
-			} catch (err) {
-				return next(err);
-			}
-
-			const controller = new CapabilityController();
-
-
-			const promise = controller.getAvailableFormats.apply(controller, validatedArgs as any);
 			promiseHandler(controller, promise, response, next);
 		});
 	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
@@ -298,6 +268,48 @@ export function RegisterRoutes(app: express.Express) {
 
 
 			const promise = controller.getAvailableEncoders.apply(controller, validatedArgs as any);
+			promiseHandler(controller, promise, response, next);
+		});
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	app.get('/capabilities/filter',
+		function(request: any, response: any, next: any) {
+			const args = {
+			};
+
+			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+			let validatedArgs: any[] = [];
+			try {
+				validatedArgs = getValidatedArgs(args, request, response);
+			} catch (err) {
+				return next(err);
+			}
+
+			const controller = new CapabilityController();
+
+
+			const promise = controller.getAvailableFilter.apply(controller, validatedArgs as any);
+			promiseHandler(controller, promise, response, next);
+		});
+	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+	app.get('/capabilities/formats',
+		function(request: any, response: any, next: any) {
+			const args = {
+			};
+
+			// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa
+
+			let validatedArgs: any[] = [];
+			try {
+				validatedArgs = getValidatedArgs(args, request, response);
+			} catch (err) {
+				return next(err);
+			}
+
+			const controller = new CapabilityController();
+
+
+			const promise = controller.getAvailableFormats.apply(controller, validatedArgs as any);
 			promiseHandler(controller, promise, response, next);
 		});
 	// WARNING: This file was auto-generated with tsoa. Please do not modify it. Re-run tsoa to re-generate this file: https://github.com/lukeautry/tsoa

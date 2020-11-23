@@ -2,6 +2,7 @@ import {
 	createReadStream,
 	existsSync,
 	mkdir,
+	ReadStream,
 	unlink,
 	writeFile
 } from "fs"
@@ -18,6 +19,9 @@ export const deleteFile = async (path: string | undefined): Promise<void> => {
 			resolve()
 		}
 	})
+}
+export const getReadableObjectFromFile = (path: string): ReadStream => {
+	return createReadStream(path)
 }
 export const readFileToBuffer = async (path: string): Promise<Buffer> => {
 	const stream = createReadStream(path)
@@ -68,7 +72,8 @@ export const createDirectoryIfNotPresent = async (
 			resolve("Created")
 		}
 		else {
-			reject(`Dir '${newDirectory}' already exists.`)
+			resolve(`Dir '${newDirectory}' already exists.`)
 		}
+		reject()
 	})
 }
