@@ -1,32 +1,43 @@
 {
 	"name": "ffmpeg-webservice",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "REST api to convert files to different formats using ffmpeg",
 	"license": "MIT",
 	"author": "Sven Patrick Meier <sven.patrick.meier@team-parallax.com>",
 	"main": "src/app.ts",
 	"scripts": {
-		"test": "jest --config ./jest.config.js",
-		"preinstall": "npx use-yarn",
-		"lint": "yarn eslint src --ext .ts --fix",
-		"tsoa:create": "tsoa spec && tsoa routes",
-		"tsoa:create:local": "yarn tsoa:create && gsed -i 's/https/http/g' swagger.json",
+		"build:docker": "docker build -t teamparallax/ffmpeg-webservice -f ./Dockerfile .",
+		"lint": "yarn eslint src --ext .ts",
+		"lint:fix": "yarn eslint src --ext .ts --fix",
 		"start": "ts-node src/app.ts",
-		"start:dev": "yarn tsoa:create:local && yarn start"
+		"start:dev": "yarn tsoa:create:local && yarn start",
+		"start:docker": "docker run --name ffmpeg-web -p 3000:3000 teamparallax/ffmpeg-webservice",
+		"start:docker:dev": "yarn run build:docker && yarn run start:docker",
+		"test": "jest --config ./jest.config.js --detectOpenHandles",
+		"tsoa:create": "tsoa spec --host $HOST && tsoa routes",
+		"tsoa:create:local": "yarn tsoa:create --host 'localhost:3000' && sed -i 's/https/http/g' swagger.json"
 	},
 	"dependencies": {
 		"body-parser": "^1.19.0",
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
-		"tsoa": "^3.2.1"
+		"fluent-ffmpeg": "^2.1.2",
+		"mime": "^2.4.6",
+		"multer": "^1.4.2",
+		"tsoa": "^3.2.1",
+		"uuid": "^8.3.0"
 	},
 	"devDependencies": {
 		"@types/body-parser": "^1.19.0",
 		"@types/cors": "^2.8.7",
 		"@types/express": "^4.17.7",
+		"@types/fluent-ffmpeg": "^2.1.16",
 		"@types/jest": "^26.0.8",
+		"@types/mime": "^2.0.3",
+		"@types/multer": "^1.4.4",
 		"@types/node": "^14.0.27",
 		"@types/swagger-ui-express": "^4.1.2",
+		"@types/uuid": "^8.3.0",
 		"@typescript-eslint/eslint-plugin": "^2.14.0",
 		"@typescript-eslint/parser": "^2.14.0",
 		"concurrently": "^5.2.0",
@@ -46,6 +57,7 @@
 		"swagger-ui-express": "^4.1.4",
 		"ts-jest": "^26.1.4",
 		"ts-node": "^8.10.2",
-		"typescript": "^3.9.7"
+		"typescript": "^3.9.7",
+		"typescript-ioc": "^3.2.2"
 	}
 }

@@ -1,0 +1,23 @@
+default:
+  image: teamparallax/ffmpeg-alpine:1.0.3-rc
+
+cache:
+  key: "$CI_COMMIT_REF_SLUG"
+  paths:
+    - .npm/
+
+stages:
+  - test
+
+before_script:
+  - yarn install --cache .npm --prefer-offline
+
+test_lint:
+  stage: test
+  script:
+    - yarn run lint
+
+test_all_tests:
+  stage: test
+  script:
+    - yarn run test
