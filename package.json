@@ -7,7 +7,8 @@
 	"main": "src/app.ts",
 	"scripts": {
 		"build:docker": "docker build -t teamparallax/ffmpeg-webservice -f ./Dockerfile .",
-		"lint": "yarn eslint src --ext .ts --fix",
+		"lint": "yarn eslint src --ext .ts",
+		"lint:fix": "yarn eslint src --ext .ts --fix",
 		"start": "ts-node src/app.ts",
 		"start:dev": "yarn tsoa:create:local && yarn start",
 		"start:docker": "docker run --name ffmpeg-web -p 3000:3000 teamparallax/ffmpeg-webservice",

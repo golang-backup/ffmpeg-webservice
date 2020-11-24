@@ -3,13 +3,14 @@ import {
 	Get,
 	Path,
 	Post,
+	// eslint-disable-next-line unused-imports/no-unused-imports-ts
 	Query,
 	Request,
 	Route,
 	Tags
 } from "tsoa"
 import { ConversionService } from "../../service/conversion"
-import { basePath, EHttpResponseCodes } from "../../constants"
+import { EHttpResponseCodes, basePath } from "../../constants"
 import {
 	IConversionProcessingResponse,
 	IConversionQueueStatus,

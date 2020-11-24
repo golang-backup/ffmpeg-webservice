@@ -1,4 +1,6 @@
 import { EHttpResponseCodes } from "../../constants"
+import { Inject } from "typescript-ioc"
+import { Logger } from "../logger"
 import { RegisterRoutes } from "../../routes/routes"
 import { createDirectoryIfNotPresent } from "../file-io"
 import Ffmpeg from "fluent-ffmpeg"
@@ -10,14 +12,13 @@ import express, {
 import path from "path"
 import swaggerDocument from "../../../swagger.json"
 import swaggerUi from "swagger-ui-express"
-import { Logger } from "../logger"
-import { Inject } from "typescript-ioc"
 export class Api {
 	@Inject
 	private readonly logger!: Logger
 	private readonly _port: number
 	private readonly app: Application
 	private readonly defaultPort: number = 3000
+	private readonly startUpDelay: number = 1500
 	constructor(port?: number) {
 		this.app = express()
 		this._port = port ?? this.defaultPort
@@ -25,7 +26,10 @@ export class Api {
 		this.addApi()
 		Ffmpeg().setFfmpegPath("/opt/ffmpeg/bin/ffmpeg")
 		this.createApplicationDirectiories(["input", "output"])
-		setTimeout(() => this.listen(), 1500)
+		setTimeout(
+			() => this.listen(),
+			this.startUpDelay
+		)
 	}
 	listen = (): void => {
 		this.app.listen(this.port, () => {
@@ -81,8 +85,7 @@ export class Api {
 		const promises = []
 		for (const directory of directories) {
 			promises.push(createDirectoryIfNotPresent(path.join(basePath, directory)))
-		}	
-		
+		}
 		Promise.all(promises)
 			.then(res => console.log(res))
 			.catch(console.error)

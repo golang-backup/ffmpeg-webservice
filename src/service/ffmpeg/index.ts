@@ -10,7 +10,7 @@ import {
 import { Inject } from "typescript-ioc"
 import { Logger } from "../logger"
 import { basePath } from "../../constants"
-import { getReadableObjectFromFile } from "../file-io"
+import { deleteFile, getReadableObjectFromFile } from "../file-io"
 import Ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
 import path from "path"
 export class FFmpegWrapper {
@@ -41,7 +41,6 @@ export class FFmpegWrapper {
 					ffmpegCommand.addOptions(options?.encoder as string[])
 				}
 				ffmpegCommand.save(outputFile).run()
-				// This.logger.log(JSON.stringify(ffmpegCommand))
 				setTimeout(() => resolve({
 					outputFilepath: outputFile
 				}), delay)

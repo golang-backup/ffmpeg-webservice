@@ -10,7 +10,7 @@ import {
 } from "./interface"
 import { IConvertedFile } from "../ffmpeg/interface"
 import { NoSuchConversionIdError } from "../../constants"
-import { getReadableObjectFromFile, readFileToBuffer } from "../file-io"
+import { readFileToBuffer } from "../file-io"
 export class ConversionQueueService {
 	private static instance: ConversionQueueService
 	private readonly convLog!: IConversionStatus[]
@@ -46,7 +46,7 @@ export class ConversionQueueService {
 	): Promise<IConversionProcessingResponse> {
 		const {
 			outputFilename,
-			outputFilepath,
+			outputFilepath
 		} = conversionResult
 		const resultFile = await readFileToBuffer(outputFilepath)
 		this.converted.push({
