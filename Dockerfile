@@ -1,4 +1,4 @@
-FROM alfg/ffmpeg:latest
+FROM teamparallax/ffmpeg-alpine:1.0.3-rc
 
 ARG host
 ENV HOST=$host
@@ -7,15 +7,6 @@ WORKDIR /app
 
 ADD . /app
 
-RUN apk --no-cache \
-    add --update \
-    --repository="http://dl-cdn.alpinelinux.org/alpine/edge/community" \
-    bash \
-    curl \
-    jq \
-    npm \
-    && ffmpeg -buildconf \
-    && npm install -g yarn \
-	&& yarn install
+RUN yarn install
 
 CMD [ "yarn", "start" ]
