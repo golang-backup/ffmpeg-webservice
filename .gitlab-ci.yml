@@ -1,5 +1,5 @@
 default:
-  image: teamparallax/ffmpeg-alpine:1.0.3
+  image: teamparallax/ffmpeg-alpine:1.0.3-rc
 
 cache:
   key: "$CI_COMMIT_REF_SLUG"
