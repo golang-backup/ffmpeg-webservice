@@ -7,7 +7,6 @@ cache:
     - .npm/
 
 stages:
-  - prepare
   - test
 
 before_script:
