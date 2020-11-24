@@ -6,11 +6,11 @@ This project provides a webservice with a REST-API for file-conversions using `f
 
 1. FFmpeg needs to be installed on your local machine if you are not running the webservice in a docker. In order to get everything working read this [ffmpeg](#correct-path-for-ffmpeg)
 
-2. Docker installation (required to build an run a container)
+2. Docker installation (required to build and run docker containers)
 
 ### Correct path for ffmpeg
 
-In order to work properly a correct set PATH variable for ffmpeg needs to exist. When running this webservice within this docker (based on `alfg/ffmpeg:latest`) the ffmpeg installation path is `/opt/ffmpeg/bin/ffmpeg`. The used library `fluent-ffmpeg` will use the value of FFMPEG_PATH variable to run `ffmpeg`, so the webservice sets this variable on start up (`src/service/api/index.ts`, l. 20), see:
+In order to work properly a correct set PATH variable for ffmpeg needs to exist. When running this webservice within this docker (based on [teamparallax/ffmpeg-alpine:1.0.3-rc](https://hub.docker.com/r/teamparallax/ffmpeg-alpine)) the ffmpeg installation path is `/opt/ffmpeg/bin/ffmpeg`. The used library `fluent-ffmpeg` will use the value of FFMPEG_PATH variable to run `ffmpeg`, so the webservice sets this variable on start up (`src/service/api/index.ts`, l. 20), see:
 
 > Ffmpeg().setFfmpegPath("/opt/ffmpeg/bin/ffmpeg")
 
@@ -36,6 +36,18 @@ yarn run build:docker
 
 # running the container
 yarn run start:docker
+```
+
+#### Using pre-built docker image
+
+You can use the built image of `teamparallax/ffmpeg-webservice` by running the following command:
+
+```console
+# Pull image from Dockerhub
+docker pull teamparallax/ffmpeg-webservice:<TAG>
+
+# Run the image
+docker run [--name <NAME>] -p <YOUR_PORT>:3000 teamparallax/ffmpeg-webservice:<TAG>
 ```
 
 ### Swagger API
