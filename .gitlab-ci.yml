@@ -8,9 +8,29 @@ cache:
 
 stages:
   - test
+  - build
 
 before_script:
   - yarn install --cache .npm --prefer-offline
+
+build_docker:
+  stage: build
+  services:
+    - docker:dind
+  image: docker:latest
+  variables:
+    DOCKER_HOST: tcp://localhost:2375
+    DOCKER_PASSWORD: ${DOCKER_PASSWORD}
+    DOCKER_USER: ${DOCKER_USER}
+    DOCKER_TLS_CERTDIR: ""
+    REGISTRY: ${REGISTRY}
+  script:
+    - echo -n "${DOCKER_PASSWORD}" | docker login -u ${DOCKER_USER} --password-stdin ${REGISTRY}
+    - docker build --build-arg host="localhost:3000" -t ${IMAGE_BASE_NAME}:${CI_COMMIT_TAG} -f ./Dockerfile .
+    - docker push ${IMAGE_BASE_NAME}:${CI_COMMIT_TAG}
+  only:
+    - tags
+    - 6-add-automatic-build-for-dockerhub
 
 test_lint:
   stage: test
