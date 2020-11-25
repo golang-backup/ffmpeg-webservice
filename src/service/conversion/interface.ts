@@ -1,4 +1,8 @@
 import { EConversionStatus } from "./enum"
+export interface IError {
+	message: string
+}
+export interface IUnsupportedConversionFormatError extends IError {}
 export interface IConvertable {
 	conversionId: string
 }

@@ -10,15 +10,19 @@ import {
 	Tags
 } from "tsoa"
 import { ConversionService } from "../../service/conversion"
-import { EHttpResponseCodes, basePath } from "../../constants"
+import {
+	DifferentOriginalFormatsDetectedError, EHttpResponseCodes, basePath
+} from "../../constants"
 import {
 	IConversionProcessingResponse,
 	IConversionQueueStatus,
 	IConversionRequestBody,
-	IConversionStatus
+	IConversionStatus,
+	IUnsupportedConversionFormatError
 } from "../../service/conversion/interface"
 import { Inject } from "typescript-ioc"
 import { Logger } from "../../service/logger"
+import { extname } from "path"
 import { getType } from "mime"
 import express from "express"
 import fs from "fs"
@@ -38,10 +42,24 @@ export class ConversionController extends Controller {
 	@Post("/")
 	public async convertFile(
 		@Request() request: express.Request
-	): Promise<IConversionProcessingResponse> {
+	): Promise<IConversionProcessingResponse | IUnsupportedConversionFormatError> {
 		this.logger.log("Conversion requested")
-		const conversionRequest = await this.handleMultipartFormData(request)
-		return await this.conversionService.processConversionRequest(conversionRequest)
+		try {
+			const conversionRequest = await this.handleMultipartFormData(request)
+			return await this.conversionService.processConversionRequest(conversionRequest)
+		}
+		catch (error) {
+			if (error instanceof DifferentOriginalFormatsDetectedError) {
+				this.setStatus(EHttpResponseCodes.badRequest)
+			}
+			else {
+				this.setStatus(EHttpResponseCodes.internalServerError)
+			}
+			this.logger.error(error.message)
+			return {
+				message: error.message
+			}
+		}
 	}
 	/**
 	 * Retrieves the status of the conversion queue and returns all conversions with
@@ -130,6 +148,12 @@ export class ConversionController extends Controller {
 				const {
 					file
 				} = request
+				const fileExtension = extname(file.originalname)
+				if (fileExtension !== originalFormat) {
+					reject(new DifferentOriginalFormatsDetectedError(
+						`The specified 'originalFormat' (${originalFormat}) differs from the one of your uploaded file (${fileExtension}).`
+					))
+				}
 				resolve({
 					file: file.buffer,
 					filename: file.originalname,
