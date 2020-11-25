@@ -15,7 +15,6 @@ const models: TsoaRoute.Models = {
 		"dataType": "refObject",
 		"properties": {
 			"conversionId": { "dataType": "string", "required": true },
-<<<<<<< HEAD
 		},
 		"additionalProperties": false,
 	},
@@ -24,8 +23,6 @@ const models: TsoaRoute.Models = {
 		"dataType": "refObject",
 		"properties": {
 			"message": { "dataType": "string", "required": true },
-=======
->>>>>>> 976670fac5ccf783bcdfccbfac0e0140cad47572
 		},
 		"additionalProperties": false,
 	},

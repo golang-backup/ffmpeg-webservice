@@ -97,7 +97,7 @@ export class ConversionController extends Controller {
 	@Get("{conversionId}/download")
 	public async getConvertedFileDownload(
 		@Path("conversionId") conversionId: string,
-		@Query("extension") extension: string = "mp3"
+			@Query("extension") extension: string = "mp3"
 	): Promise<unknown> {
 		try {
 			const {

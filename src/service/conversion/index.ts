@@ -11,7 +11,9 @@ import {
 	IConversionRequestBody,
 	IConversionStatus
 } from "./interface"
-import { IConversionResult, IFormat, TCapabilities } from "../ffmpeg/interface"
+import {
+	IConversionResult, IFormat, TCapabilities
+} from "../ffmpeg/interface"
 import { Inject } from "typescript-ioc"
 import { Logger } from "../logger"
 import { UnsupportedConversionFormatError } from "../../constants"
