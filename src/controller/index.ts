@@ -11,7 +11,11 @@ import {
 	IFFmpegCapabilities,
 	IFilter,
 	IFormat
+<<<<<<< HEAD
 } from "../service/ffmpeg/interface"
+=======
+} from "~/service/ffmpeg/interface"
+>>>>>>> 976670fac5ccf783bcdfccbfac0e0140cad47572
 import { Inject } from "typescript-ioc"
 @Route("/capabilities")
 @Tags("Capabilities")

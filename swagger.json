@@ -309,6 +309,7 @@
 						"content": {
 							"application/json": {
 								"schema": {
+<<<<<<< HEAD
 									"anyOf": [
 										{
 											"$ref": "#/components/schemas/IConversionProcessingResponse"
@@ -317,6 +318,9 @@
 											"$ref": "#/components/schemas/IUnsupportedConversionFormatError"
 										}
 									]
+=======
+									"$ref": "#/components/schemas/IConversionProcessingResponse"
+>>>>>>> 976670fac5ccf783bcdfccbfac0e0140cad47572
 								}
 							}
 						}
@@ -398,6 +402,7 @@
 						"description": "Unique identifier for the conversion of a file.",
 						"in": "path",
 						"name": "conversionId",
+<<<<<<< HEAD
 						"required": true,
 						"schema": {
 							"type": "string"
@@ -414,6 +419,62 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
+								"schema": {}
+							},
+							"application/pdf": {
+								"schema": {
+									"type": "string",
+									"format": "byte"
+								}
+							}
+						}
+					}
+				},
+				"description": "Returns the current status for a conversion given a conversionId\nIf status is 'converted' the resulting converted file\nwill be available to download.",
+				"tags": [
+					"Conversion"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"description": "the id of the file-conversion that is requested",
+						"in": "path",
+						"name": "conversionId",
+=======
+>>>>>>> 976670fac5ccf783bcdfccbfac0e0140cad47572
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					},
+					{
+						"in": "query",
+						"name": "extension",
+						"required": false,
+						"schema": {
+							"default": "mp3",
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+<<<<<<< HEAD
+		"/capabilities": {
+			"get": {
+				"operationId": "GetAvailableCapabilities",
+=======
+		"/conversion/{conversionId}/download": {
+			"get": {
+				"operationId": "GetConvertedFileDownload",
+>>>>>>> 976670fac5ccf783bcdfccbfac0e0140cad47572
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+<<<<<<< HEAD
+=======
 								"schema": {}
 							},
 							"application/pdf": {
@@ -460,6 +521,7 @@
 						"description": "Ok",
 						"content": {
 							"application/json": {
+>>>>>>> 976670fac5ccf783bcdfccbfac0e0140cad47572
 								"schema": {
 									"$ref": "#/components/schemas/IFFmpegCapabilities"
 								}
