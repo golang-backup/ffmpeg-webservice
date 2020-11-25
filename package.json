@@ -1,6 +1,6 @@
 {
 	"name": "ffmpeg-webservice",
-	"version": "0.2.0",
+	"version": "0.3.0",
 	"description": "REST api to convert files to different formats using ffmpeg",
 	"license": "MIT",
 	"author": "Sven Patrick Meier <sven.patrick.meier@team-parallax.com>",
