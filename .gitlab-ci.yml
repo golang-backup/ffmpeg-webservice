@@ -17,6 +17,7 @@ build_docker:
   stage: build
   services:
     - docker:dind
+  before_script: []
   image: docker:latest
   variables:
     DOCKER_HOST: tcp://localhost:2375
