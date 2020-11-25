@@ -18,6 +18,13 @@ export class ConversionError extends Error {
 		this.name = "ConversionError"
 	}
 }
+export class DifferentOriginalFormatsDetectedError extends Error {
+	readonly name: string
+	constructor(message: string | undefined) {
+		super(message)
+		this.name = "DifferentOriginalFormatsDetectedError"
+	}
+}
 export class NoTargetFormatSpecifiedError extends Error {
 	readonly name: string
 	constructor(message: string | undefined) {
@@ -37,5 +44,12 @@ export class NoSuchConversionIdError extends Error {
 	constructor(message: string | undefined) {
 		super(message)
 		this.name = "NoSuchConversionIdError"
+	}
+}
+export class UnsupportedConversionFormatError extends Error {
+	readonly name: string
+	constructor(message: string | undefined) {
+		super(message)
+		this.name = "UnsupportedConversionFormatError"
 	}
 }
