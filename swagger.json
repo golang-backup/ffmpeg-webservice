@@ -21,6 +21,18 @@
 					"conversionId": "55309c37-aed3-4ee9-a143-f1e305333189"
 				}
 			},
+			"IUnsupportedConversionFormatError": {
+				"properties": {
+					"message": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"message"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
 			"EConversionStatus": {
 				"enum": [
 					"converted",
@@ -297,7 +309,14 @@
 						"content": {
 							"application/json": {
 								"schema": {
-									"$ref": "#/components/schemas/IConversionProcessingResponse"
+									"anyOf": [
+										{
+											"$ref": "#/components/schemas/IConversionProcessingResponse"
+										},
+										{
+											"$ref": "#/components/schemas/IUnsupportedConversionFormatError"
+										}
+									]
 								}
 							}
 						}

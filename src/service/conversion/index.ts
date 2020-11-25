@@ -1,4 +1,6 @@
+/* eslint-disable no-void */
 /* eslint-disable @typescript-eslint/no-floating-promises */
+import { CapabilityService } from "../capabilities"
 import { ConversionQueueService } from "./conversionQueue"
 import { EConversionStatus } from "./enum"
 import { FFmpegWrapper } from "../ffmpeg"
@@ -9,11 +11,14 @@ import {
 	IConversionRequestBody,
 	IConversionStatus
 } from "./interface"
-import { IConversionResult } from "../ffmpeg/interface"
+import {
+	IConversionResult, IFormat, TCapabilities
+} from "../ffmpeg/interface"
 import { Inject } from "typescript-ioc"
 import { Logger } from "../logger"
-import { v4 as uuidV4 } from "uuid"
+import { UnsupportedConversionFormatError } from "../../constants"
 import { deleteFile, writeToFile } from "../file-io"
+import { v4 as uuidV4 } from "uuid"
 export class ConversionService {
 	@Inject
 	private readonly conversionQueueService!: ConversionQueueService
@@ -45,7 +50,6 @@ export class ConversionService {
 			this.queueService.currentlyConvertingFile = fileToProcess
 			this.queueService.changeConvLogEntry(conversionId, EConversionStatus.processing)
 			try {
-				// Todo: Implement wrapper.
 				const conversionResponse: IConversionResult = await this.ffmpeg
 					.convertToTargetFormat(path, conversionId, sourceFormat, targetFormat)
 				/* Delete input file. */
@@ -60,14 +64,12 @@ export class ConversionService {
 				this.queueService.changeConvLogEntry(conversionId, EConversionStatus.converted)
 			}
 			catch (err) {
-				this.logger.error(`Readding the file conversion request due to error before: ${err}`)
+				this.logger.error(`Re-add the file conversion request due to error before: ${err}`)
 				this.queueService.addToConversionQueue(fileToProcess)
 				this.queueService.changeConvLogEntry(conversionId, EConversionStatus.inQueue)
 			}
 			finally {
-				// Todo: refactor/replace with function
 				this.isCurrentlyConverting = false
-				// eslint-disable-next-line no-void
 				void this.update()
 			}
 		}
@@ -101,6 +103,10 @@ export class ConversionService {
 		originalFormat,
 		targetFormat
 	}: IConversionRequestBody): Promise<IConversionProcessingResponse> {
+		const supports = await this.supportsConversion(originalFormat, targetFormat)
+		if (!supports) {
+			throw new UnsupportedConversionFormatError(`Your input contains unsupported conversion formats. ${originalFormat} or ${targetFormat} is not supported.`)
+		}
 		const conversionId = uuidV4()
 		const inPath = `input/${conversionId}.${originalFormat}`
 		await writeToFile(inPath, file)
@@ -113,6 +119,18 @@ export class ConversionService {
 			targetFormat
 		}
 		return this.addToConversionQueue(request)
+	}
+	async supportsConversion(from: string, to: string): Promise<boolean> {
+		const capabilityService: CapabilityService = new CapabilityService()
+		const formats = await capabilityService.getAvailableFormats()
+		const supportsFrom = this.containsCapability<IFormat>(formats, from)
+		const supportsTo = this.containsCapability<IFormat>(formats, to)
+		return supportsFrom && supportsTo
+	}
+	private containsCapability<T extends TCapabilities>(
+		capabilities: T[], capability: string
+	): boolean {
+		return capabilities.find(cap => cap.name === capability) !== undefined
 	}
 	private async update(): Promise<void> {
 		if (!this.isCurrentlyConverting) {

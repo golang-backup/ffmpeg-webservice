@@ -13,6 +13,11 @@ import { Inject } from "typescript-ioc"
 export class CapabilityService {
 	@Inject
 	private readonly ffmpegWrapper!: FFmpegWrapper
+	public containsCapability<T extends TCapabilities>(
+		capabilities: T[], capability: string
+	): boolean {
+		return capabilities.find(cap => cap.name === capability) !== undefined
+	}
 	async getAllCapabilities(): Promise<IFFmpegCapabilities> {
 		const codecs = await this.getAvailableCodecs()
 		const encoders = await this.getAvailableEncoders()
@@ -56,5 +61,11 @@ export class CapabilityService {
 			}
 		}
 		return namedData
+	}
+	async supportsConversion(from: string, to: string): Promise<boolean> {
+		const formats = await this.getAvailableFormats()
+		const supportsFrom = this.containsCapability<IFormat>(formats, from)
+		const supportsTo = this.containsCapability<IFormat>(formats, to)
+		return supportsFrom && supportsTo
 	}
 }

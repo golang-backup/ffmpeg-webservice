@@ -10,7 +10,6 @@ import {
 import { Inject } from "typescript-ioc"
 import { Logger } from "../logger"
 import { basePath } from "../../constants"
-import { deleteFile, getReadableObjectFromFile } from "../file-io"
 import Ffmpeg, { FfmpegCommand } from "fluent-ffmpeg"
 import path from "path"
 export class FFmpegWrapper {
