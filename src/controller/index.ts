@@ -11,7 +11,7 @@ import {
 	IFFmpegCapabilities,
 	IFilter,
 	IFormat
-} from "~/service/ffmpeg/interface"
+} from "../service/ffmpeg/interface"
 import { Inject } from "typescript-ioc"
 @Route("/capabilities")
 @Tags("Capabilities")
