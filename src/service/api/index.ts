@@ -2,7 +2,9 @@ import { EHttpResponseCodes } from "../../constants"
 import { Inject } from "typescript-ioc"
 import { Logger } from "../logger"
 import { RegisterRoutes } from "../../routes/routes"
+import { ValidateError } from "tsoa"
 import { createDirectoryIfNotPresent } from "../file-io"
+import { generateHTML, serve } from "swagger-ui-express"
 import Ffmpeg from "fluent-ffmpeg"
 import cors from "cors"
 import express, {
@@ -16,7 +18,6 @@ import express, {
 } from "express"
 import path from "path"
 import swaggerDocument from "../../../swagger.json"
-import swaggerUi from "swagger-ui-express"
 export class Api {
 	@Inject
 	private readonly logger!: Logger
@@ -42,28 +43,45 @@ export class Api {
 		})
 	}
 	private readonly addApi = (): void => {
+		const {
+			internalServerError,
+			notFound,
+			validationError
+		} = EHttpResponseCodes
 		this.app.get("/", (req, res, err) => {
 			res.send("Request received")
 		})
+		this.app.use("/docs", serve, async (req: Request, res: Response) => {
+			return res.send(
+				generateHTML(await import("../../../swagger.json"))
+			)
+		})
 		RegisterRoutes(this.app as Express)
-		this.app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument as any))
 		this.app.get("/swagger.json", (req: Request, res: Response) => res.json(swaggerDocument))
 		this.app.use((
-			err: any,
+			err: unknown,
 			req: Request,
 			res: Response,
 			next: NextFunction
-		) => {
-			const status = err.status || EHttpResponseCodes.internalServerError
-			this.logger.error(err)
-			const body: any = {
-				fields: err.fields || undefined,
-				message: err.message || "An error occurred during the request.",
-				name: err.name,
-				status
+		): Response | void => {
+			if (err instanceof ValidateError) {
+				console.warn(`Caught Validation Error for ${req.path}:`, err.fields)
+				return res.status(validationError).json({
+					details: err?.fields,
+					message: "Validation Failed"
+				})
 			}
-			res.status(status).json(body)
+			if (err instanceof Error) {
+				return res.status(internalServerError).json({
+					message: "Internal Server Error"
+				})
+			}
 			next()
+		})
+		this.app.use((req: Request, res: Response) => {
+			res.status(notFound).send({
+				message: "Not Found"
+			})
 		})
 	}
 	private readonly configureServer = (): void => {

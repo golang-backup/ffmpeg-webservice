@@ -5,6 +5,7 @@ import { ConversionQueueService } from "./conversionQueue"
 import { EConversionStatus } from "./enum"
 import { FFmpegWrapper } from "../ffmpeg"
 import {
+	IConversionInQueue,
 	IConversionProcessingResponse,
 	IConversionQueueStatus,
 	IConversionRequest,
@@ -75,27 +76,27 @@ export class ConversionService {
 		}
 	}
 	public getConversionQueueStatus(): IConversionQueueStatus {
-		const conversions = this.queueService.conversionLog.map(
-			item => {
-				const queuePosition: number = this.queueService.conversionQueue.findIndex(
-					element => element.conversionId === item.conversionId
-				)
-				if (item.status === EConversionStatus.inQueue) {
-					return {
-						...item,
-						queuePosition
-					}
-				}
-				return item
+		const conversions: IConversionInQueue[] = []
+		for (const [key, value] of this.queueService.conversionLog) {
+			const queuePosition: number = this.queueService.conversionQueue.findIndex(
+				element => element.conversionId === key
+			)
+			if (value.status === EConversionStatus.inQueue) {
+				conversions.push({
+					...value,
+					conversionId: key,
+					queuePosition
+				})
 			}
-		)
+		}
 		return {
 			conversions,
 			remainingConversions: this.queueLength
 		}
 	}
 	public getConvertedFile(fileId: string): IConversionStatus {
-		return this.queueService.getStatusById(fileId)
+		const response = this.queueService.getStatusById(fileId)
+		return response
 	}
 	public async processConversionRequest({
 		file,

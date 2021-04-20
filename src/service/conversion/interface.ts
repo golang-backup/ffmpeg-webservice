@@ -14,7 +14,6 @@ export interface IConversionInQueue extends IConversionStatus {
 }
 export interface IConversionInProgress extends IConversionStatus {}
 export interface IConversionFinished extends IConversionStatus {
-	resultFile: Buffer,
 	resultFilePath: string
 }
 /**

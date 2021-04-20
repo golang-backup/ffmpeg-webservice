@@ -11,7 +11,9 @@ import {
 } from "tsoa"
 import { ConversionService } from "../../service/conversion"
 import {
-	DifferentOriginalFormatsDetectedError, EHttpResponseCodes, basePath
+	DifferentOriginalFormatsDetectedError,
+	EHttpResponseCodes,
+	basePath
 } from "../../constants"
 import {
 	IConversionProcessingResponse,
@@ -97,7 +99,7 @@ export class ConversionController extends Controller {
 	@Get("{conversionId}/download")
 	public async getConvertedFileDownload(
 		@Path("conversionId") conversionId: string,
-		@Query("extension") extension: string = "mp3"
+			@Query("extension") extension: string = "mp3"
 	): Promise<unknown> {
 		try {
 			const {
