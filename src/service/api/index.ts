@@ -4,10 +4,15 @@ import { Logger } from "../logger"
 import { RegisterRoutes } from "../../routes/routes"
 import { createDirectoryIfNotPresent } from "../file-io"
 import Ffmpeg from "fluent-ffmpeg"
-import bodyParser from "body-parser"
 import cors from "cors"
 import express, {
-	Application, Express, NextFunction, Request, Response
+	Application,
+	Express,
+	NextFunction,
+	Request,
+	Response,
+	json,
+	urlencoded
 } from "express"
 import path from "path"
 import swaggerDocument from "../../../swagger.json"
@@ -65,14 +70,13 @@ export class Api {
 		// Mount json form parser
 		this.app.use(cors())
 		// Set max limit
-		this.app.use(bodyParser.urlencoded({
+		this.app.use(urlencoded({
 			extended: true,
 			limit: "50mb"
 		}))
-		this.app.use(bodyParser.json({
+		this.app.use(json({
 			limit: "50mb"
 		}))
-		// This.app.use(methodOverride());
 		this.app.use((req: Request, res: Response, next: NextFunction) => {
 			res.header("Access-Control-Allow-Origin", "*")
 			res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept")
