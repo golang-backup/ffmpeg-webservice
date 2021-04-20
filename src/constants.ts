@@ -7,6 +7,7 @@ export enum EHttpResponseCodes {
     unauthorized = 401,
     forbidden = 403,
     notFound = 404,
+	validationError = 422,
     internalServerError = 500,
     unavailable = 503
 }
@@ -23,6 +24,13 @@ export class DifferentOriginalFormatsDetectedError extends Error {
 	constructor(message: string | undefined) {
 		super(message)
 		this.name = "DifferentOriginalFormatsDetectedError"
+	}
+}
+export class InvalidPathError extends Error {
+	readonly name: string
+	constructor(message: string | undefined) {
+		super(message)
+		this.name = "InvalidPathError"
 	}
 }
 export class NoTargetFormatSpecifiedError extends Error {

@@ -13,9 +13,9 @@ import { NoSuchConversionIdError } from "../../constants"
 import { readFileToBuffer } from "../file-io"
 export class ConversionQueueService {
 	private static instance: ConversionQueueService
-	private readonly convLog!: IConversionStatus[]
-	private readonly conversion!: IConversionRequest[]
-	private readonly converted!: IConversionResult[]
+	private convLog!: Map<string, Omit<IConversionStatus, "conversionId">>
+	private conversion!: IConversionRequest[]
+	private converted!: IConversionResult[]
 	private currentlyConverting!: IConversionRequest | null
 	private isConverting!: boolean
 	constructor() {
@@ -23,7 +23,7 @@ export class ConversionQueueService {
 			return ConversionQueueService.instance
 		}
 		ConversionQueueService.instance = this
-		this.convLog = []
+		this.convLog = new Map<string, Omit<IConversionStatus, "conversionId">>()
 		this.conversion = []
 		this.converted = []
 		this.currentlyConverting = null
@@ -32,8 +32,7 @@ export class ConversionQueueService {
 	}
 	public addToConversionQueue(requestObject: IConversionRequest): IConversionProcessingResponse {
 		this.conversion.push(requestObject)
-		this.convLog.push({
-			conversionId: requestObject.conversionId,
+		this.convLog.set(requestObject.conversionId, {
 			status: EConversionStatus.inQueue
 		})
 		return {
@@ -61,22 +60,24 @@ export class ConversionQueueService {
 		}
 	}
 	public changeConvLogEntry(conversionId: string, status: EConversionStatus): void {
-		const element = this.convLog.find(convElement => convElement.conversionId === conversionId)
+		const element = this.convLog.get(conversionId)
 		if (!element) {
 			throw new NoSuchConversionIdError("No such conversion element")
 		}
-		element.status = status
+		else {
+			element.status = status
+		}
 	}
 	public getNextQueueElement(): IConversionRequest | undefined {
 		return this.conversionQueue.shift()
 	}
 	public getStatusById(conversionId: string): IConversionStatus {
-		const isInConversionQueue: boolean = this.conversionQueue.filter(
-			(item: IConversionRequest) => item.conversionId === conversionId
-		).length > 0
-		const isInConvertedQueue: boolean = this.convertedQueue.filter(
-			(item: IConversionResult) => item.conversionId === conversionId
-		).length > 0
+		const isInConversionQueue: boolean = this.convLog.get(
+			conversionId
+		)?.status === EConversionStatus.inQueue
+		const isInConvertedQueue: boolean = this.convLog.get(
+			conversionId
+		)?.status === EConversionStatus.converted
 		if (this.currentlyConvertingFile?.conversionId === conversionId) {
 			return this.response(EConversionStatus.processing, conversionId)
 		}
@@ -114,7 +115,6 @@ export class ConversionQueueService {
 				.filter(item => item.conversionId === conversionId)[0]
 			const response: IConversionFinished = {
 				conversionId,
-				resultFile: convertedFile.resultFile,
 				resultFilePath: convertedFile.path,
 				status
 			}
@@ -126,14 +126,23 @@ export class ConversionQueueService {
 		}
 		return response
 	}
-	get conversionLog(): IConversionStatus[] {
+	get conversionLog(): Map<string, Omit<IConversionStatus, "conversionId">> {
 		return this.convLog
+	}
+	set conversionLog(newConversionLog: Map<string, Omit<IConversionStatus, "conversionId">>) {
+		this.convLog = newConversionLog
 	}
 	get conversionQueue(): IConversionRequest[] {
 		return this.conversion
 	}
+	set conversionQueue(newConversionQueue: IConversionRequest[]) {
+		this.conversion = newConversionQueue
+	}
 	get convertedQueue(): IConversionResult[] {
 		return this.converted
+	}
+	set convertedQueue(newConvertedQueue: IConversionResult[]) {
+		this.converted = newConvertedQueue
 	}
 	get currentlyConvertingFile(): IConversionRequest | null {
 		return this.currentlyConverting

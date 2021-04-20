@@ -40,12 +40,16 @@ export class FFmpegWrapper {
 					ffmpegCommand.addOptions(options?.encoder as string[])
 				}
 				ffmpegCommand.save(outputFile).run()
-				setTimeout(() => resolve({
-					outputFilepath: outputFile
-				}), delay)
+				setTimeout(
+					() =>
+						resolve({
+							outputFilepath: outputFile
+						}),
+					delay
+				)
 			}
 			catch (err) {
-				reject(`FROM WITHIN CONVERSION${ err}`)
+				reject(`FROM WITHIN CONVERSION${err}`)
 			}
 		})
 	}

@@ -1,11 +1,15 @@
+import { InvalidPathError, basePath } from "../../constants"
 import {
 	ReadStream,
 	createReadStream,
 	existsSync,
 	mkdir,
+	readFileSync,
+	statSync,
 	unlink,
 	writeFile
 } from "fs"
+import { resolve } from "path"
 type TArrayBufferView = NodeJS.ArrayBufferView
 export const deleteFile = async (path: string | undefined): Promise<void> => {
 	return await new Promise((resolve, reject) => {
@@ -76,4 +80,22 @@ export const createDirectoryIfNotPresent = async (
 		}
 		reject()
 	})
+}
+export const isFile = (path: string): boolean => {
+	if (existsSync(path) && statSync(path).isFile()) {
+		return true
+	}
+	return false
+}
+export const readFromFileSync = (pathParam: string): Buffer => {
+	// Will evaluate to something like ffmpeg-webservice/<pathParam>
+	const path = resolvePath(pathParam)
+	if (!isFile(path)) {
+		throw new InvalidPathError("No such file")
+	}
+	const file = readFileSync(path)
+	return Buffer.from(file)
+}
+export const resolvePath = (pathParam: string): string => {
+	return resolve(basePath, pathParam)
 }
