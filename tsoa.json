@@ -5,10 +5,19 @@
 		"src/controller/**/*.ts"
 	],
 	"spec": {
-		"specMerging": "recursive",
-		"outputDirectory": "./",
-		"specVersion": 3,
+		"contact": {
+			"email": "sven.patrick.meier@team-parallax.com",
+			"name": "Sven Patrick Meier",
+			"url": "https://team-parallax.com/svenpatrickmeier"
+		},
 		"host": "localhost:3000",
+		"outputDirectory": "./",
+		"schemes": [
+			"http",
+			"https"
+		],
+		"specMerging": "recursive",
+		"specVersion": 3,
 		"spec": {
 			"paths": {
 				"/conversion": {
@@ -44,7 +53,7 @@
 								"description": "Ok",
 								"content": {
 									"application/pdf": {
-										"schema":{
+										"schema": {
 											"type": "string",
 											"format": "byte"
 										}

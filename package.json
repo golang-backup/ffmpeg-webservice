@@ -14,11 +14,10 @@
 		"start:docker": "docker run --name ffmpeg-web -p 3000:3000 teamparallax/ffmpeg-webservice",
 		"start:docker:dev": "yarn run build:docker && yarn run start:docker",
 		"test": "jest --config ./jest.config.js --detectOpenHandles",
-		"tsoa:create": "tsoa spec --host $HOST && tsoa routes",
-		"tsoa:create:local": "yarn tsoa:create --host 'localhost:3000' && sed -i 's/https/http/g' swagger.json"
+		"tsoa:create:host": "tsoa spec --host $HOST && tsoa routes",
+		"tsoa:create:local": "tsoa spec --host 'localhost:3000' && tsoa routes"
 	},
 	"dependencies": {
-		"body-parser": "^1.19.0",
 		"cors": "^2.8.5",
 		"express": "^4.17.1",
 		"fluent-ffmpeg": "^2.1.2",
@@ -28,7 +27,6 @@
 		"uuid": "^8.3.0"
 	},
 	"devDependencies": {
-		"@types/body-parser": "^1.19.0",
 		"@types/cors": "^2.8.7",
 		"@types/express": "^4.17.7",
 		"@types/fluent-ffmpeg": "^2.1.16",

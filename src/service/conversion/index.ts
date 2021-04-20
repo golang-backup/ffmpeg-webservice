@@ -103,20 +103,22 @@ export class ConversionService {
 		originalFormat,
 		targetFormat
 	}: IConversionRequestBody): Promise<IConversionProcessingResponse> {
-		const supports = await this.supportsConversion(originalFormat, targetFormat)
+		const origin = originalFormat.replace(/\./, "")
+		const target = targetFormat.replace(/\./, "")
+		const supports = await this.supportsConversion(origin, target)
 		if (!supports) {
 			throw new UnsupportedConversionFormatError(`Your input contains unsupported conversion formats. ${originalFormat} or ${targetFormat} is not supported.`)
 		}
 		const conversionId = uuidV4()
-		const inPath = `input/${conversionId}.${originalFormat}`
+		const inPath = `input/${conversionId}.${origin}`
 		await writeToFile(inPath, file)
 		const request: IConversionRequest = {
 			conversionId,
 			isConverted: false,
 			name: filename,
 			path: inPath,
-			sourceFormat: originalFormat,
-			targetFormat
+			sourceFormat: origin,
+			targetFormat: target
 		}
 		return this.addToConversionQueue(request)
 	}

@@ -288,14 +288,15 @@
 	},
 	"info": {
 		"title": "ffmpeg-webservice",
-		"version": "0.2.0",
+		"version": "0.3.0",
 		"description": "REST api to convert files to different formats using ffmpeg",
 		"license": {
 			"name": "MIT"
 		},
 		"contact": {
-			"name": "Sven Patrick Meier ",
-			"email": "sven.patrick.meier@team-parallax.com"
+			"email": "sven.patrick.meier@team-parallax.com",
+			"name": "Sven Patrick Meier",
+			"url": "https://team-parallax.com/svenpatrickmeier"
 		}
 	},
 	"openapi": "3.0.0",
@@ -581,7 +582,7 @@
 	},
 	"servers": [
 		{
-			"url": "http://localhost:3000/"
+			"url": "http://host.docker.internal:3000/"
 		}
 	]
 }
