@@ -17,7 +17,7 @@ before_script:
 build_docker:
   stage: build
   services:
-    - docker:dind
+    - docker:19.03.5-dind
   before_script: []
   image: docker:19.03.5-dind
   variables:
