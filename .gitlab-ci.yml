@@ -57,4 +57,4 @@ test_all:
   only:
     - branches
   except:
-    - master
+    - tags
