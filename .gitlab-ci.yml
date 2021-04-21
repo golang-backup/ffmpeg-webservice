@@ -38,6 +38,10 @@ lint_code:
   stage: lint
   script:
     - yarn run lint
+  only:
+    - branches
+  except:
+    - tags
 
 test_all:
   stage: test
@@ -50,3 +54,7 @@ test_all:
     untracked: false
     reports:
       junit: junit.xml
+  only:
+    - branches
+  except:
+    - master
