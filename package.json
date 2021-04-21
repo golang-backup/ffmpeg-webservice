@@ -20,7 +20,9 @@
 		"start:dev": "yarn tsoa:create:local && yarn start",
 		"start:docker": "docker run --name ffmpeg-web -p 3000:3000 teamparallax/ffmpeg-webservice",
 		"start:docker:dev": "yarn run build:docker && yarn run start:docker",
-		"test": "yarn jest --config ./jest.config.js --detectOpenHandles",
+		"test:all": "yarn jest --config ./jest.config.js --detectOpenHandles",
+		"test:all:ci": "yarn test:all:coverage --ci --reporters=default --reporters=jest-junit",
+		"test:all:coverage": "yarn test:all --coverage",
 		"tsoa:create:host": "tsoa spec --host $HOST && tsoa routes",
 		"tsoa:create:local": "tsoa spec --host 'localhost:3000' && tsoa routes"
 	},
@@ -61,6 +63,7 @@
 		"faker": "^5.5.3",
 		"husky": "^6.0.0",
 		"jest": "^26.2.2",
+		"jest-junit": "^12.0.0",
 		"lint-staged": "^10.0.9",
 		"parallax-common-config": "^0.10.7",
 		"source-map-support": "^0.5.16",
