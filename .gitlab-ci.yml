@@ -44,7 +44,7 @@ lint_code:
 test_all:
   stage: test
   script:
-    - yarn run test
+    - yarn run test:all:ci
   coverage: /All files[^|]*\|[^|]*\s+([\d\.]+)/
   artifacts:
     when: always
