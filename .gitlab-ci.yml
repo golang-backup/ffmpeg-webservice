@@ -19,7 +19,7 @@ build_docker:
   services:
     - docker:dind
   before_script: []
-  image: docker:latest
+  image: docker:19-dind
   variables:
     DOCKER_HOST: tcp://localhost:2375
     DOCKER_PASSWORD: ${DOCKER_PASSWORD}
