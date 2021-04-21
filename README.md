@@ -52,4 +52,4 @@ docker run [--name <NAME>] -p <YOUR_PORT>:3000 teamparallax/ffmpeg-webservice:<T
 
 ### Swagger API
 
-To see the API-documentation in development-environment one can go to `http://localhost:3000/api-docs`.
+To see the API-documentation in development-environment one can go to `http://localhost:3000/docs`.
