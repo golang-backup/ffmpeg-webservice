@@ -1,6 +1,6 @@
 FROM teamparallax/ffmpeg-alpine:1.0.3-rc
 
-ARG host=host.docker.internal:3000
+ARG host=localhost:3000
 ENV HOST=$host
 
 WORKDIR /app
