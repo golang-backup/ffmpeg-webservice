@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.3.9](https://gitlab.internal.team-parallax.com/belwue/ffmpeg-webservice/compare/v0.3.8...v0.3.9) (2021-05-01)
+
+
+### Others
+
+* **versionrc:** add versionrc file ([3ad9770](https://gitlab.internal.team-parallax.com/belwue/ffmpeg-webservice/commit/3ad97709c1680631748ebf6a1c77c9e49f89422c))
+
 ### [0.3.8](https://gitlab.internal.team-parallax.com/belwue/ffmpeg-webservice/compare/v0.3.7...v0.3.8) (2021-04-28)
 
 ### [0.3.7](https://gitlab.internal.team-parallax.com/belwue/ffmpeg-webservice/compare/v0.3.6...v0.3.7) (2021-04-28)
