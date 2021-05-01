@@ -95,8 +95,7 @@ export class ConversionService {
 		}
 	}
 	public getConvertedFile(fileId: string): IConversionStatus {
-		const response = this.queueService.getStatusById(fileId)
-		return response
+		return this.queueService.getStatusById(fileId)
 	}
 	public async processConversionRequest({
 		file,

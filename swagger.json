@@ -288,7 +288,7 @@
 	},
 	"info": {
 		"title": "ffmpeg-webservice",
-		"version": "0.3.5",
+		"version": "0.3.8",
 		"description": "REST api to convert files to different formats using ffmpeg",
 		"license": {
 			"name": "MIT"
